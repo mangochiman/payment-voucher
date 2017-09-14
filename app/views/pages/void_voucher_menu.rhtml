@@ -1,0 +1,85 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>Voucher #</th>
+      <th>Voucher Date</th>
+      <th>Voucher Amount</th>
+      <th>Expenditure Details</th>
+      <th>Account Name</th>
+      <th>Donor Code</th>
+      <th style="width: 3.5em;"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @payment_vouchers.each do |payment_voucher| %>
+      <tr>
+        <td><%= payment_voucher.voucher_number %></td>
+        <td><%= payment_voucher.voucher_date.to_date.strftime("%d/%b/%Y") rescue payment_voucher.voucher_date  %></td>
+        <td><%= number_to_currency(payment_voucher.voucher_amount, :unit => "MWK ") %></td>
+        <td><%= payment_voucher.expenditure_details %></td>
+        <td><%= payment_voucher.account_name %></td>
+        <td><%= payment_voucher.donor_code %></td>
+        <td>
+          <a href="#" onclick="voidVoucherConfirm('<%= payment_voucher.payment_voucher_id %>')" role="button" data-toggle="modal"><i class="fa fa-trash-o"></i></a>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="voidVoucherModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Void voucher</h4>
+      </div>
+      <div class="modal-body">
+        This will void the selected voucher. Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No, Am Not Sure</button>
+        <button onclick="voidVoucher();" type="button" class="btn btn-primary">Yes, Am Sure</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+
+<script type="text/javascript">
+ var selectedVoucherID;
+
+  function voidVoucherConfirm(voucherID){
+    selectedVoucherID = voucherID;
+    jQuery('#voidVoucherModal').modal('show');
+  }
+
+  function voidVoucher(){
+    body = document.getElementsByTagName("body")[0];
+
+    form = document.createElement("form");
+    form.method = "POST"
+    form.action = "/void_voucher_menu";
+    body.appendChild(form);
+
+    input = document.createElement("input");
+    input.type = "hidden";
+    input.value = selectedVoucherID;
+    input.name = "voucher_id";
+    form.appendChild(input);
+
+    form.submit();
+
+  }
+
+ window.setTimeout(function(){
+    //jQuery('.black-list').addClass('active');
+    //jQuery('#black-list-nav').addClass('in');
+  }, 150);
+
+</script>

@@ -1,0 +1,55 @@
+<form action="/edit_this_voucher" role="form" class="form-horizontal" method="POST">
+
+  <div class="form-group">
+    <label class="control-label col-lg-3" for="voucher_number">Voucher Number</label>
+    <div class="col-lg-7">
+      <input type="text" name="voucher_number" value="<%= @payment_voucher.voucher_number %>" class="form-control" placeholder="Voucher #" id="voucher_number" number required/>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label col-lg-3" for="voucher_date">Voucher Date</label>
+    <div class="col-lg-7">
+      <input type="text" name="voucher_date" value="<%= @payment_voucher.voucher_date %>" class="form-control" placeholder="Voucher date" id="voucher_date" required/>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label col-lg-3" for="voucher_amount">Voucher Amount</label>
+    <div class="col-lg-7">
+      <input type="text" name="voucher_amount" value="<%= @payment_voucher.voucher_amount %>" class="form-control" placeholder="Voucher Amount" id="voucher_amount" required/>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label col-lg-3" for="expenditure_details">Details Of Expenditure</label>
+    <div class="col-lg-7">
+      <textarea rows="3" name="expenditure_details" class="form-control" placeholder="Details of expenditure" id="expenditure_details" required><%= @payment_voucher.expenditure_details %></textarea>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label col-lg-3" for="account_name">Account Name</label>
+    <div class="col-lg-7">
+      <input type="text" name="account_name"  value="<%= @payment_voucher.account_name %>" class="form-control" placeholder="Account Name" id="account_name" required/>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label col-lg-3" for="donor_code">Donor Code</label>
+    <div class="col-lg-7">
+      <input type="text" name="donor_code" value="<%= @payment_voucher.donor_code %>" class="form-control" placeholder="Donor Code" id="username" required/>
+    </div>
+  </div>
+
+  <input type="hidden" value="<%= @payment_voucher.payment_voucher_id %>" name="voucher_id"></input>
+  
+  <div class="form-group modal-footer">
+    <label class="control-label col-lg-3" for="">&nbsp;</label>
+    <div class="col-lg-7">
+      <input class="btn btn-primary " type="submit" value="Save changes"></input>
+    </div>
+  </div>
+
+
+</form>

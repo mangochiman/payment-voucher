@@ -1,0 +1,164 @@
+<style>
+  .baobab-logo{
+    height: 100px;
+    text-align: center;
+    float: center;
+  }
+</style>
+<div class="row">
+  <div class="col-md-12">
+    <center>
+      <img src="/images/baobab.png" class="baobab-logo"></img>
+      <h2 style="color: black;">PAYMENT VOUCHER</h2>
+    </center>
+    <div style="padding-right: 100px;">
+      <strong>Cheque #:</strong>
+      <strong class="pull-right">Voucher #:</strong>
+    </div><br />
+
+    <div style="padding-right: 100px;">
+      <strong class="pull-right">Date:</strong>
+    </div><br /><br />
+
+    <div style="padding-right: 100px;">
+      <strong class="pull-right">Amount:</strong>
+    </div><br />
+
+    <div>
+      <strong class="pull-left">Payee Details:</strong>
+    </div> <br /><br />
+  </div>
+
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <p style="text-align: center;"><strong>PAYMENT DETAILS</strong></p>
+    <div class="panel panel-default">
+      <table class="table table-bordered table-first-column-check table-hover">
+        <thead>
+          <tr>
+            <th class="col-md-8">Reference</th>
+            <th class="col-md-8" style="text-align: center;">Details Of Expenditure</th>
+            <th class="col-md-3" colspan="2" style="text-align: center;">Amount (MWK)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>As per attached</td>
+            <td><%=  @payment_voucher.expenditure_details %></td>
+            <%
+            voucher_amount = number_to_currency(@payment_voucher.voucher_amount, :unit => "")
+
+          %>
+            <td><%= voucher_amount.split(".")[0] %></td>
+            <td><%= voucher_amount.split(".")[1] %></td>
+          </tr>
+          <% 3.times do %>
+            <tr>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+          <% end %>
+          <tr>
+            <td>&nbsp;</td>
+            <td><strong class="pull-right">Total</strong></td>
+
+            <td><%= voucher_amount.split(".")[0] %></td>
+            <td><%= voucher_amount.split(".")[1] %></td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-bordered table-first-column-check table-hover">
+      <thead></thead>
+      <tbody>
+        <tr>
+          <td style="width: 200px; text-align: left;" >W.H Tax Cert<br /> No:</td>
+          <td>N/A</td>
+          <td>Collected By:</td>
+          <td>Signature:</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-bordered table-first-column-check table-hover">
+      <thead></thead>
+      <tbody>
+        <tr>
+          <td>Comments:</td>
+          <td>&nbsp;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-bordered table-first-column-check table-hover">
+      <thead></thead>
+      <tbody>
+        <tr>
+          <td style="width: 400px;">Account Name</td>
+          <td colspan="4" style="text-align: center;">Budget Code</td>
+          <td style="text-align: center;">Donor Code</td>
+          <td colspan="2" style="text-align: center;">Amount (MK)</td>
+        </tr>
+        <tr>
+          <td><%= @payment_voucher.account_name %></td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td style="text-align: center;"><%= @payment_voucher.donor_code %></td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-bordered table-first-column-check table-hover">
+      <thead></thead>
+      <tbody>
+        <tr>
+          <td style="width: 200px; text-align: left;">Prepared by:</td>
+          <td style="width: 400px;">&nbsp;</td>
+          <td>Cheque collected by:</td>
+          <td style="width: 400px;">&nbsp;</td>
+        </tr>
+        <tr>
+          <td style="width: 200px; text-align: left;">Checked by:</td>
+          <td>&nbsp;</td>
+          <td>Date of collection:</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td style="width: 200px; text-align: left;">Approved by:</td>
+          <td>&nbsp;</td>
+          <td>Signature:</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td style="width: 200px; text-align: left;">Date:</td>
+          <td colspan="3">&nbsp;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
