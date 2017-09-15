@@ -7,14 +7,18 @@ class PagesController < ApplicationController
     @page_header = "New payment voucher"
     @workings = Workings.find(:all)
     if request.post?
-      raise params.inspect
+      if params[:workings].blank?
+        flash[:error] = "Voucher creation failed. Workings were not selected"
+        redirect_to("/new_voucher_menu") and return
+      end
       new_payment_voucher = PaymentVoucher.new_payment_voucher(params)
       if new_payment_voucher.save
+        PaymentVoucherWorkings.create_workings(new_payment_voucher.payment_voucher_id, params)
         flash[:notice] = "New payment voucher was saved"
-        redirect_to("/view_voucher_menu")
+        redirect_to("/view_voucher_menu") and return
       else
         flash[:error] = "Failed to save the payment voucher"
-        redirect_to("/new_voucher_menu")
+        redirect_to("/new_voucher_menu") and return
       end
     end
   end
@@ -42,6 +46,19 @@ class PagesController < ApplicationController
 
   def view_this_voucher
     @payment_voucher = PaymentVoucher.find(params[:voucher_id])
+    @workings = @payment_voucher.workings
+    sub_total = @payment_voucher.voucher_amount.to_f
+    @workings.each do |payment_voucher_working|
+      plus_minus = payment_voucher_working.workings.value
+      workings_percent = payment_voucher_working.workings.percent
+      calculated_value = ((workings_percent.to_f/100) * @payment_voucher.voucher_amount.to_f)
+      payable_amount_string = "#{sub_total}#{plus_minus}#{calculated_value}"
+      #raise payable_amount_string.inspect
+      sub_total = eval(payable_amount_string)
+      #raise sub_total.inspect
+      #raise calculated_value.inspect
+    end
+    @payable_amount = sub_total
     @page_header = "Viewing payment voucher #:  #{@payment_voucher.voucher_number}"
   end
 

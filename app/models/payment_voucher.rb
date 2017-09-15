@@ -2,6 +2,7 @@ class PaymentVoucher < ActiveRecord::Base
   set_table_name :payment_vouchers
   set_primary_key :payment_voucher_id
 
+  has_many :workings, :class_name => "PaymentVoucherWorkings",  :foreign_key => :payment_voucher_id
   default_scope :conditions => "#{self.table_name}.voided = 0"
   
   def self.new_payment_voucher(params)
