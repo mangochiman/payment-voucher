@@ -5,7 +5,9 @@ class PagesController < ApplicationController
 
   def new_voucher_menu
     @page_header = "New payment voucher"
+    @workings = Workings.find(:all)
     if request.post?
+      raise params.inspect
       new_payment_voucher = PaymentVoucher.new_payment_voucher(params)
       if new_payment_voucher.save
         flash[:notice] = "New payment voucher was saved"
