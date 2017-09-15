@@ -5,10 +5,17 @@ ActionController::Routing::Routes.draw do |map|
   map.view_voucher_menu  '/view_voucher_menu',  :controller => 'pages', :action => 'view_voucher_menu'
   map.void_voucher_menu  '/void_voucher_menu',  :controller => 'pages', :action => 'void_voucher_menu'
   map.edit_this_voucher  '/edit_this_voucher',  :controller => 'pages', :action => 'edit_this_voucher'
-  map.view_this_voucher  '/view_this_voucher',  :controller => 'pages', :action => 'view_this_voucher'
+  map.view_this_voucher  '/view_this_voucher',  :controller => 'pages', :action => 'view_this_voucher' 
+  map.voucher_downloadable  '/voucher_downloadable',  :controller => 'pages', :action => 'voucher_downloadable'
   map.new_user  '/new_user',  :controller => 'pages', :action => 'new_user'
   map.remove_user  '/remove_user',  :controller => 'pages', :action => 'remove_user'
-  map.payments_report  '/payments_report',  :controller => 'pages', :action => 'payments_report'
+  map.new_workings  '/new_workings',  :controller => 'pages', :action => 'new_workings'
+  map.edit_workings  '/edit_workings',  :controller => 'pages', :action => 'edit_workings'
+  map.edit_this_workings  '/edit_this_workings',  :controller => 'pages', :action => 'edit_this_workings'
+  map.view_workings  '/view_workings',  :controller => 'pages', :action => 'view_workings'
+  map.void_workings  '/void_workings',  :controller => 'pages', :action => 'void_workings'
+  #
+  #map.new_voucher_menu  '/new_voucher_menu',  :controller => 'pages', :action => 'new_voucher_menu'
   # Sample of regular route:
   #   map.connect 'products/:id', :controller => 'catalog', :action => 'view'
   # Keep in mind you can assign values other than :controller and :action

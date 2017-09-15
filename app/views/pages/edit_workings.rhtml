@@ -1,0 +1,26 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th> #</th>
+      <th>Name</th>
+      <th>Percent</th>
+      <th>Value</th>
+      <th style="width: 3.5em;"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% count = 0 %>
+    <% @workings.each do |workings| %>
+      <tr>
+        <% count = count + 1 %>
+        <td><%= count %></td>
+        <td><%= workings.name  %></td>
+        <td><%= workings.percent %></td>
+        <td><strong><%= workings.value %></strong></td>
+        <td>
+          <a href="/edit_this_workings?workings_id=<%= workings.workings_id %>"><i class="fa fa-pencil"></i></a>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

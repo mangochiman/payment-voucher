@@ -1,0 +1,43 @@
+<form action="/edit_this_workings" role="form" class="form-horizontal" method="POST">
+
+  <div class="form-group">
+    <label class="control-label col-lg-3" for="item">Name</label>
+    <div class="col-lg-7">
+      <input type="text" name="name" value="<%= @workings.name %>" class="form-control" placeholder="Workings name" id="item" required/>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label col-lg-3" for="percent">Percent (%)</label>
+    <div class="col-lg-7">
+      <input type="text" name="percent" value="<%= @workings.percent %>" class="form-control" placeholder="Percent (%)" id="percent" required/>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label col-lg-3">Workings value</label>
+    <div class="col-lg-7">
+      <select name="value" class="form-control" tabindex="8" required>
+        <option value="">Select value</option>
+        <% @values.each do |key, value| %>
+          <% if @workings.value.squish == value.squish %>
+            <option selected="true" value="<%= value %>"><%= key %></option>
+          <% else %>
+            <option value="<%= value %>"><%= key %></option>
+          <% end %>
+        <% end %>
+      </select>
+    </div>
+  </div>
+
+  <input type="hidden" value="<%= @workings.workings_id %>" name="workings_id"></input>
+  
+  <div class="form-group modal-footer">
+    <label class="control-label col-lg-3" for="">&nbsp;</label>
+    <div class="col-lg-7">
+      <input class="btn btn-primary " type="submit" value="Update Workings"></input>
+    </div>
+  </div>
+
+
+</form>

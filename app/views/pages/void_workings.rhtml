@@ -1,0 +1,86 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th> #</th>
+      <th>Name</th>
+      <th>Percent</th>
+      <th>Value</th>
+      <th style="width: 3.5em;"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% count = 0 %>
+    <% @workings.each do |workings| %>
+      <tr>
+        <% count = count + 1 %>
+        <td><%= count %></td>
+        <td><%= workings.name  %></td>
+        <td><%= workings.percent %></td>
+        <td><strong><%= workings.value %></strong></td>
+        <td>
+          <a href="#" onclick="voidWorkingsConfirm('<%= workings.workings_id %>')" role="button" data-toggle="modal"><i class="fa fa-trash-o"></i></a>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="voidWorkingsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Void item</h4>
+      </div>
+      <div class="modal-body">
+        This will void the selected item. Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No, Am Not Sure</button>
+        <button onclick="voidWorkings();" type="button" class="btn btn-primary">Yes, Am Sure</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+
+<script type="text/javascript">
+  var selectedWorkingsID;
+
+  function voidWorkingsConfirm(workingsID){
+    selectedWorkingsID = workingsID;
+    jQuery('#voidWorkingsModal').modal('show');
+  }
+
+  function voidWorkings(){
+    body = document.getElementsByTagName("body")[0];
+
+    form = document.createElement("form");
+    form.method = "POST"
+    form.action = "/void_workings";
+    body.appendChild(form);
+
+    input = document.createElement("input");
+    input.type = "hidden";
+    input.value = selectedWorkingsID;
+    input.name = "workings_id";
+    form.appendChild(input);
+
+    form.submit();
+
+  }
+
+  window.setTimeout(function(){
+    //jQuery('.black-list').addClass('active');
+    //jQuery('#black-list-nav').addClass('in');
+  }, 150);
+
+</script>

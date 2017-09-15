@@ -1,0 +1,22 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th> #</th>
+      <th>Name</th>
+      <th>Percent</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% count = 0 %>
+    <% @workings.each do |workings| %>
+      <tr>
+        <% count = count + 1 %>
+        <td><%= count %></td>
+        <td><%= workings.name  %></td>
+        <td><%= workings.percent %></td>
+        <td><strong><%= workings.value %></strong></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

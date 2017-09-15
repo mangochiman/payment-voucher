@@ -31,6 +31,7 @@ class PaymentVoucher < ActiveRecord::Base
   def self.void_voucher(voucher_id)
     payment_voucher = PaymentVoucher.find(voucher_id)
     payment_voucher.voided = 1
+    return payment_voucher
   end
 
   def self.todays_voucher_count
