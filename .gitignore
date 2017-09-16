@@ -8,3 +8,4 @@ nbproject
 Gemfile.lock
 log/*
 config/*.yml
+tmp/
