@@ -9,6 +9,7 @@ ActionController::Routing::Routes.draw do |map|
   map.personal_details  '/personal_details',  :controller => 'pages', :action => 'personal_details'
   map.voucher_downloadable  '/voucher_downloadable',  :controller => 'pages', :action => 'voucher_downloadable'
   map.new_user  '/new_user',  :controller => 'pages', :action => 'new_user'
+  map.update_user_profile  '/update_user_profile',  :controller => 'pages', :action => 'update_user_profile'
   map.view_users  '/view_users',  :controller => 'pages', :action => 'view_users'
   map.remove_user  '/remove_user',  :controller => 'pages', :action => 'remove_user'
   map.new_workings  '/new_workings',  :controller => 'pages', :action => 'new_workings'

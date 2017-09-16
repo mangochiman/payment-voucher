@@ -1,4 +1,5 @@
 class PagesController < ApplicationController
+  skip_before_filter :authenticate_user, :only => [:login, :authenticate, :reset_password]
   def login
     if request.post?
       user = User.find_by_username(params['username'])
@@ -132,6 +133,20 @@ class PagesController < ApplicationController
     end
   end
 
+  def update_user_profile
+    @page_header = "Editing profile"
+    if request.post?
+       update_user = User.update_user(session[:user], params)
+       if (update_user.save)
+         flash[:notice] = "Profile update was succesful"
+         redirect_to("/personal_details") and return
+       else
+        flash[:error] = update_user.errors.full_messages.join('<br />')
+        redirect_to("/update_user_profile") and return
+       end
+    end
+  end
+  
   def view_users
     @page_header = "View Users"
     @users = User.all

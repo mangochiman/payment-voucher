@@ -70,6 +70,15 @@ class User < ActiveRecord::Base
     return user
   end
 
+  def self.update_user(user, params)
+    user.first_name = params[:first_name]
+    user.last_name = params[:last_name]
+    user.email = params[:email]
+    user.phone_number = params[:phone_number]
+    user.username = params[:username]
+    return user
+  end
+
   def void_user
     user = self
     user.voided = 1
