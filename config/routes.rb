@@ -19,6 +19,7 @@ ActionController::Routing::Routes.draw do |map|
   map.void_workings  '/void_workings',  :controller => 'pages', :action => 'void_workings'
   map.login  '/login',  :controller => 'pages', :action => 'login'
   map.logout  '/logout',  :controller => 'pages', :action => 'logout'
+  map.change_password  '/change_password',  :controller => 'pages', :action => 'change_password'
   map.reset_password  '/reset_password',  :controller => 'pages', :action => 'reset_password'
 
   #map.new_voucher_menu  '/new_voucher_menu',  :controller => 'pages', :action => 'new_voucher_menu'

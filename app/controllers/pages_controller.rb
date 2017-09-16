@@ -136,14 +136,39 @@ class PagesController < ApplicationController
   def update_user_profile
     @page_header = "Editing profile"
     if request.post?
-       update_user = User.update_user(session[:user], params)
-       if (update_user.save)
-         flash[:notice] = "Profile update was succesful"
-         redirect_to("/personal_details") and return
-       else
+      update_user = User.update_user(session[:user], params)
+      if (update_user.save)
+        flash[:notice] = "Profile update was succesful"
+        redirect_to("/personal_details") and return
+      else
         flash[:error] = update_user.errors.full_messages.join('<br />')
         redirect_to("/update_user_profile") and return
-       end
+      end
+    end
+  end
+
+  def change_password
+    @page_header = "Change password"
+    user = session[:user]
+    if request.post?
+      if (User.authenticate(user.username, params[:old_password]))
+        if (params[:new_password] == params[:confirm_password])
+          user.password = User.encrypt(params[:new_password], user.salt)
+          if (user.save)
+            flash[:notice] = "You have successfully updated your password. Your new password is <b>#{params[:new_password]}</b>"
+            redirect_to("/personal_details") and return
+          else
+            flash[:error] = user.errors.full_messages.join('<br />')
+            redirect_to("/change_password") and return
+          end
+        else
+          flash[:error] = "Password update failed. New password and confirmation password does not match"
+          redirect_to("/change_password") and return
+        end
+      else
+        flash[:error] = "Password update failed. Old password is not correct"
+        redirect_to("/change_password") and return
+      end
     end
   end
   
