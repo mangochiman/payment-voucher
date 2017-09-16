@@ -70,6 +70,12 @@ class User < ActiveRecord::Base
     return user
   end
 
+  def void_user
+    user = self
+    user.voided = 1
+    return user
+  end
+
   def self.roles
     roles = [
       ["Admin", 'Admin'],
@@ -77,6 +83,12 @@ class User < ActiveRecord::Base
     ]
     return roles
   end
-  
+
+  def role
+    user_role = self.user_roles.last
+    user_role = user_role. role unless user_role.blank?
+    return user_role
+  end
+
 end
 

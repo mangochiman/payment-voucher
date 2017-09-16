@@ -5,16 +5,21 @@ ActionController::Routing::Routes.draw do |map|
   map.view_voucher_menu  '/view_voucher_menu',  :controller => 'pages', :action => 'view_voucher_menu'
   map.void_voucher_menu  '/void_voucher_menu',  :controller => 'pages', :action => 'void_voucher_menu'
   map.edit_this_voucher  '/edit_this_voucher',  :controller => 'pages', :action => 'edit_this_voucher'
-  map.view_this_voucher  '/view_this_voucher',  :controller => 'pages', :action => 'view_this_voucher' 
+  map.view_this_voucher  '/view_this_voucher',  :controller => 'pages', :action => 'view_this_voucher'
+  map.personal_details  '/personal_details',  :controller => 'pages', :action => 'personal_details'
   map.voucher_downloadable  '/voucher_downloadable',  :controller => 'pages', :action => 'voucher_downloadable'
   map.new_user  '/new_user',  :controller => 'pages', :action => 'new_user'
+  map.view_users  '/view_users',  :controller => 'pages', :action => 'view_users'
   map.remove_user  '/remove_user',  :controller => 'pages', :action => 'remove_user'
   map.new_workings  '/new_workings',  :controller => 'pages', :action => 'new_workings'
   map.edit_workings  '/edit_workings',  :controller => 'pages', :action => 'edit_workings'
   map.edit_this_workings  '/edit_this_workings',  :controller => 'pages', :action => 'edit_this_workings'
   map.view_workings  '/view_workings',  :controller => 'pages', :action => 'view_workings'
   map.void_workings  '/void_workings',  :controller => 'pages', :action => 'void_workings'
-  #
+  map.login  '/login',  :controller => 'pages', :action => 'login'
+  map.logout  '/logout',  :controller => 'pages', :action => 'logout'
+  map.reset_password  '/reset_password',  :controller => 'pages', :action => 'reset_password'
+
   #map.new_voucher_menu  '/new_voucher_menu',  :controller => 'pages', :action => 'new_voucher_menu'
   # Sample of regular route:
   #   map.connect 'products/:id', :controller => 'catalog', :action => 'view'

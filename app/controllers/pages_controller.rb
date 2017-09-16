@@ -1,4 +1,25 @@
 class PagesController < ApplicationController
+  def login
+    if request.post?
+      user = User.find_by_username(params['username'])
+      logged_in_user = User.authenticate(params[:username], params[:password])
+      if logged_in_user
+        session[:user] = user
+        redirect_to("/") and return
+      else
+        flash[:error] = "Invalid username or password"
+        redirect_to("/login") and return
+      end
+    end
+    
+    render :layout => false
+  end
+
+  def logout
+    reset_session #Destroy all sessions
+    redirect_to("/login") and return
+  end
+  
   def home
     @page_header = "Dashboard"
   end
@@ -95,14 +116,14 @@ class PagesController < ApplicationController
 
       if (password != password_confirm)
         flash[:error] = "Password Mismatch"
-        redirect_to("/sign_up") and return
+        redirect_to("/new_user") and return
       end
       user = User.new_user(params)
 
       if user.save
         UserRole.create_user_role(user, params)
 
-        flash[:notice] = "You have created your account. You may now login. Your API key is <br />"
+        flash[:notice] = "Account creation was successful"
         redirect_to("/new_user") and return
       else
         flash[:error] = user.errors.full_messages.join('<br />')
@@ -111,11 +132,34 @@ class PagesController < ApplicationController
     end
   end
 
+  def view_users
+    @page_header = "View Users"
+    @users = User.all
+  end
 
   def remove_user
     @page_header = "Remove user"
+    @users = User.all
+    if request.post?
+      user = User.find(params[:user_id])
+      user.void_user
+      if user.save
+        flash[:notice] = "#{user.username} has been voided"
+      else
+        flash[:error] = "Failed to void the selected user"
+      end
+      redirect_to("/remove_user") and return 
+    end
   end
 
+  def reset_password
+    render :layout => false
+  end
+  
+  def personal_details
+    @page_header = "Personal Details"
+  end
+  
   def payments_report
     @page_header = "Payments Report"
   end

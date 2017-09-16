@@ -99,11 +99,12 @@
       <ul id="main-menu" class="nav navbar-nav navbar-right">
         <li class="dropdown hidden-xs">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <span class="glyphicon glyphicon-user padding-right-small" style="position:relative;top: 3px;"></span> Jack Smith
+            <span class="glyphicon glyphicon-user padding-right-small" style="position:relative;top: 3px;"></span> <%= session[:user].first_name.to_s + " " + session[:user].last_name.to_s %>
             <i class="fa fa-caret-down"></i>
           </a>
 
           <ul class="dropdown-menu">
+            <li><a href="/personal_details">Personal details</a></li>
             <li class="divider"></li>
             <li class="dropdown-header">Admin Panel</li>
             <li><a href="/change_password">Change password</a></li>
@@ -136,6 +137,7 @@
       <li>
         <ul class="accounts-menu nav nav-list collapse">
           <li ><a href="/new_user"><span class="fa fa-caret-right"></span> New User</a></li>
+          <li ><a href="/view_users"><span class="fa fa-caret-right"></span> View Users</a></li>
           <li ><a href="/remove_user"><span class="fa fa-caret-right"></span> Remove User</a></li>
         </ul>
       </li>
@@ -173,9 +175,19 @@
 
     </div>
     <div class="main-content">
+      <div>
+        <% if flash[:notice] %>
+        <center><span class="label label-success"><%= flash[:notice] %></span></center>
+          <br />
+        <% end %>
+        <% if flash[:error] %>
+          <center><span class="label label-danger"> <%= flash[:error] %></span></center>
+          <br />
+        <% end %>
+      </div>
       <%= yield %>
       <footer>
-        <hr>
+        <hr />
 
         <!-- Purchase a site license to remove this link from the footer: http://www.portnine.com/bootstrap-themes -->
         <p>© 2017 <a href="#" target="_blank">WebTech++</a></p>
