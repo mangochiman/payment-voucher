@@ -44,5 +44,23 @@ class PaymentVoucher < ActiveRecord::Base
       :order => "payment_voucher_id DESC")
     return my_vouchers
   end
-  
+
+  def self.search_by_voucher_number(voucher_number)
+    search_results = PaymentVoucher.find(:all, :conditions => ["voucher_number =? ", voucher_number],
+      :order => "payment_voucher_id DESC")
+    return search_results
+  end
+
+  def self.search_by_donor_code(donor_code)
+    search_results = PaymentVoucher.find(:all, :conditions => ["donor_code =? ", donor_code],
+      :order => "payment_voucher_id DESC")
+    return search_results
+  end
+
+  def self.search_by_account_name(account_name)
+    search_results = PaymentVoucher.find(:all, :conditions => ["account_name LIKE (?) ", "%#{account_name}%"],
+      :order => "payment_voucher_id DESC")
+    return search_results
+  end
+
 end

@@ -299,6 +299,10 @@ class PagesController < ApplicationController
 
   def search_vouchers_menu
     @page_header = "Search vouchers"
+    @search_results = []
+    if (params[:voucher_number])
+      @search_results = PaymentVoucher.search_by_voucher_number(params[:voucher_number])
+    end
   end
   
 end
