@@ -1,0 +1,35 @@
+<p class="main-detail h3 text-warning" style="margin-top: 0px;">Total vouchers: <%= @my_vouchers.count %></p><br />
+<table class="table">
+  <thead>
+    <tr>
+      <th>Voucher #</th>
+      <th>Voucher Date</th>
+      <th>Voucher Amount</th>
+      <th>Expenditure Details</th>
+      <th>Account Name</th>
+      <th>Donor Code</th>
+      <th style="width: 3.5em;"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @my_vouchers.each do |payment_voucher| %>
+      <tr>
+        <td><%= payment_voucher.voucher_number %></td>
+        <td><%= payment_voucher.voucher_date.to_date.strftime("%d/%b/%Y") rescue payment_voucher.voucher_date  %></td>
+        <td><%= number_to_currency(payment_voucher.voucher_amount, :unit => "MWK ") %></td>
+        <td><%= payment_voucher.expenditure_details %></td>
+        <td><%= payment_voucher.account_name %></td>
+        <td><%= payment_voucher.donor_code %></td>
+        <td>
+          <a href="/view_this_voucher?voucher_id=<%= payment_voucher.payment_voucher_id %>" role="button" data-toggle="modal"><i class="fa fa-eye"></i></a>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<script type="text/javascript">
+  window.onload = function(){
+    //jQuery('.dashboard-menu').addClass('in');
+  }
+</script>

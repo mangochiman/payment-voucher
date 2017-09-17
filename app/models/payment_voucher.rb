@@ -13,7 +13,7 @@ class PaymentVoucher < ActiveRecord::Base
      payment_voucher.expenditure_details = params[:expenditure_details]
      payment_voucher.account_name = params[:account_name]
      payment_voucher.donor_code = params[:donor_code]
-     payment_voucher.prepared_by = 1
+     payment_voucher.prepared_by = params[:user_id]
      return payment_voucher
   end
 
@@ -25,7 +25,6 @@ class PaymentVoucher < ActiveRecord::Base
      payment_voucher.expenditure_details = params[:expenditure_details]
      payment_voucher.account_name = params[:account_name]
      payment_voucher.donor_code = params[:donor_code]
-     payment_voucher.prepared_by = 1
      return payment_voucher
   end
 
@@ -39,4 +38,11 @@ class PaymentVoucher < ActiveRecord::Base
     count = PaymentVoucher.all.count
     return count
   end
+
+  def self.my_vouchers(user)
+    my_vouchers = PaymentVoucher.find(:all, :conditions => ["prepared_by =? ", user.user_id],
+      :order => "payment_voucher_id DESC")
+    return my_vouchers
+  end
+  
 end

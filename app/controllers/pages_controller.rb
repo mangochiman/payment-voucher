@@ -291,5 +291,10 @@ class PagesController < ApplicationController
       redirect_to("/lock_screen") and return
     end
   end
+
+  def my_vouchers
+    @page_header = "My vouchers"
+    @my_vouchers = PaymentVoucher.my_vouchers(session[:user])
+  end
   
 end
