@@ -296,5 +296,9 @@ class PagesController < ApplicationController
     @page_header = "My vouchers"
     @my_vouchers = PaymentVoucher.my_vouchers(session[:user])
   end
+
+  def search_vouchers_menu
+    @page_header = "Search vouchers"
+  end
   
 end
