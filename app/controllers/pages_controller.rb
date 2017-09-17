@@ -1,6 +1,9 @@
 class PagesController < ApplicationController
   skip_before_filter :authenticate_user, :only => [:login, :authenticate, :reset_password]
+  before_filter :lock_screen_when_activated, :except => [:lock_screen, :unlock_screen, :login, :logout, :reset_password]
+  
   def login
+    session.delete(:screen_locked) if session[:screen_locked]
     if request.post?
       user = User.find_by_username(params['username'])
       logged_in_user = User.authenticate(params[:username], params[:password])
@@ -260,6 +263,32 @@ class PagesController < ApplicationController
       end
       
       redirect_to("/void_workings")
+    end
+  end
+
+  def lock_screen
+    session[:screen_locked] = true
+    http_referrer = request.env["HTTP_REFERER"]
+
+    unless (http_referrer.blank? || (http_referrer.match(/lock_screen/i)))
+      session[:referrer] = request.referrer
+    end
+
+    render :layout => false
+  end
+
+  def unlock_screen
+    logged_in_user = User.authenticate(session[:user].username, params[:password])
+
+    if logged_in_user
+      session.delete(:screen_locked) if session[:screen_locked]
+      (redirect_to("#{session[:referrer]}") and return) unless session[:referrer].blank?
+      redirect_to("/") and return
+    else
+      #flash[:error] = "Invalid password"
+      #request.referrer = session[:referrer]
+      #return
+      redirect_to("/lock_screen") and return
     end
   end
   

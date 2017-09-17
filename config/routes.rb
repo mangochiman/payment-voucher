@@ -18,6 +18,8 @@ ActionController::Routing::Routes.draw do |map|
   map.view_workings  '/view_workings',  :controller => 'pages', :action => 'view_workings'
   map.void_workings  '/void_workings',  :controller => 'pages', :action => 'void_workings'
   map.login  '/login',  :controller => 'pages', :action => 'login'
+  map.lock_screen  '/lock_screen',  :controller => 'pages', :action => 'lock_screen'
+  map.unlock_screen  '/unlock_screen',  :controller => 'pages', :action => 'unlock_screen'
   map.logout  '/logout',  :controller => 'pages', :action => 'logout'
   map.change_password  '/change_password',  :controller => 'pages', :action => 'change_password'
   map.reset_password  '/reset_password',  :controller => 'pages', :action => 'reset_password'

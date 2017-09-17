@@ -24,5 +24,14 @@ class ApplicationController < ActionController::Base
   def access_denied
     redirect_to ("/login") and return
   end
+
+  def lock_screen_when_activated
+    user = User.find(session[:user].user_id) rescue nil
+    if user
+      return true if session[:screen_locked].blank?
+      redirect_to ("/lock_screen") and return
+      return true
+    end
+  end
   
 end
