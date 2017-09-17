@@ -8,6 +8,7 @@ ActionController::Routing::Routes.draw do |map|
   map.view_this_voucher  '/view_this_voucher',  :controller => 'pages', :action => 'view_this_voucher'
   map.my_vouchers  '/my_vouchers',  :controller => 'pages', :action => 'my_vouchers'
   map.search_vouchers_menu  '/search_vouchers_menu',  :controller => 'pages', :action => 'search_vouchers_menu'
+  map.update_cheque_number  '/update_cheque_number',  :controller => 'pages', :action => 'update_cheque_number'
   map.personal_details  '/personal_details',  :controller => 'pages', :action => 'personal_details'
   map.voucher_downloadable  '/voucher_downloadable',  :controller => 'pages', :action => 'voucher_downloadable'
   map.new_user  '/new_user',  :controller => 'pages', :action => 'new_user'

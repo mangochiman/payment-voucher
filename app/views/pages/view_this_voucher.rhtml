@@ -5,6 +5,17 @@
     float: center;
   }
 </style>
+
+<div class="row pull-right">
+  <div class="col-md-12">
+    <input onclick="voidVoucherConfirm();" class="btn btn-danger " value="Void voucher" type="button"/>
+    <input onclick="editVoucher();" class="btn btn-primary " value="Edit voucher" type="button"/>
+    <input onclick="updateChequeDetails();" class="btn btn-primary " value="Update cheque details" type="button"/>
+    <input onclick="downloadVoucherAsPDF();" class="btn btn-primary " value="Download PDF" type="button"/>
+    <input onclick="updateCashBookConfirm();" class="btn btn-primary " value="Update cash book " type="button"/>
+  </div>
+</div><br /><br /><br />
+
 <div class="row">
   <div class="col-md-12">
     <center>
@@ -12,12 +23,12 @@
       <h2 style="color: black;">PAYMENT VOUCHER</h2>
     </center>
     <div style="padding-right: 100px;">
-      <strong>Cheque #:</strong>
-      <strong class="pull-right">Voucher #:</strong>
+      <strong>Cheque #: <%= @payment_voucher.cheque_number %></strong>
+      <strong class="pull-right">Voucher #: <%= @payment_voucher.voucher_number %></strong>
     </div><br />
 
     <div style="padding-right: 100px;">
-      <strong class="pull-right">Date:</strong>
+      <strong class="pull-right">Date: <%= @payment_voucher.voucher_date.to_date.strftime("%d/%b/%Y") rescue @payment_voucher.voucher_date %></strong>
     </div><br /><br />
 
     <div style="padding-right: 100px;">
@@ -184,15 +195,31 @@
   </div>
 </div>
 
-<div class="row">
+<div class="row pull-right">
   <div class="col-md-12">
+    <input onclick="voidVoucherConfirm();" class="btn btn-danger " value="Void voucher" type="button"/>
+    <input onclick="editVoucher();" class="btn btn-primary " value="Edit voucher" type="button"/>
+    <input onclick="updateChequeDetails();" class="btn btn-primary " value="Update cheque details" type="button"/>
     <input onclick="downloadVoucherAsPDF();" class="btn btn-primary " value="Download PDF" type="button"/>
+    <input onclick="updateCashBookConfirm();" class="btn btn-primary " value="Update cash book " type="button"/>
   </div>
 </div>
 
 <script type="text/javascript">
+
+  var voucherId = "<%= params[:voucher_id] %>";
   function downloadVoucherAsPDF(){
     
+  }
+
+  function editVoucher(){
+    editURL = "/edit_this_voucher?voucher_id=" + voucherId;
+    window.location = editURL;
+  }
+
+  function updateChequeDetails(){
+    updateChequelNumberURL = "/update_cheque_number?voucher_id=" + voucherId;
+    window.location = updateChequelNumberURL;
   }
   
 </script>

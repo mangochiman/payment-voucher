@@ -1,0 +1,111 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12" >
+
+
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">Voucher Details</h3>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+
+            <div class=" col-md-12 ">
+              <table class="table table-user-information">
+                <tbody>
+                  <tr>
+                    <td>Voucher #</td>
+                    <td><strong><%= @payment_voucher.voucher_number %></strong></td>
+                  </tr>
+                  <tr>
+                    <td>Cheque #</td>
+                    <td><strong><%= @payment_voucher.cheque_number %></strong></td>
+                  </tr>
+                  <tr>
+                    <td>Voucher Date:</td>
+                    <td><strong><%= @payment_voucher.voucher_date %></strong></td>
+                  </tr>
+                  <tr>
+                    <td>Voucher Amount</td>
+                    <td><strong><%= @payment_voucher.voucher_amount %></strong></td>
+                  </tr>
+
+                  <tr>
+                    <td>Details of expenditure</td>
+                    <td><strong><%= @payment_voucher.expenditure_details %></strong></td>
+                  </tr>
+                  <tr>
+                    <td>Account name</td>
+                    <td><strong><%= @payment_voucher.account_name %></strong></td>
+                  </tr>
+                  <tr>
+                    <td>Donor code</td>
+                    <td><strong><%= @payment_voucher.donor_code %></strong></td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <form action="/update_cheque_number" role="form" class="form-horizontal" id="cheque-number-form" method="POST">
+
+      <div class="form-group">
+        <label class="control-label col-lg-3" for="cheque_number">Cheque Number</label>
+        <div class="col-lg-7">
+          <input type="text" name="cheque_number" value="<%= @payment_voucher.cheque_number %>" class="form-control" placeholder="Cheque #" id="cheque_number" autocomplete="off" required/>
+          <input type="hidden" value="<%= @payment_voucher.payment_voucher_id %>" name="voucher_id"/>
+        </div>
+      </div>
+
+      <div class="form-group modal-footer">
+        <label class="control-label col-lg-3" for="">&nbsp;</label>
+        <div class="col-lg-7">
+          <input class="btn btn-primary " type="submit" value="Update cheque number"></input>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<style>
+  .user-row {
+    margin-bottom: 14px;
+  }
+
+  .user-row:last-child {
+    margin-bottom: 0;
+  }
+
+  .dropdown-user {
+    margin: 13px 0;
+    padding: 5px;
+    height: 100%;
+  }
+
+  .dropdown-user:hover {
+    cursor: pointer;
+  }
+
+  .table-user-information > tbody > tr {
+    border-top: 1px solid rgb(221, 221, 221);
+  }
+
+  .table-user-information > tbody > tr:first-child {
+    border-top: 0;
+  }
+
+
+  .table-user-information > tbody > tr > td {
+    border-top: 0;
+  }
+  .toppad
+  {margin-top:20px;
+  }
+</style>

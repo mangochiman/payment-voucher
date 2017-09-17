@@ -318,5 +318,20 @@ class PagesController < ApplicationController
     end
     
   end
+
+  def update_cheque_number
+    @page_header = "Update cheque number"
+    @payment_voucher = PaymentVoucher.find(params[:voucher_id])
+    if request.post?
+      updated_voucher = @payment_voucher.update_cheque_number(params)
+      if updated_voucher.save
+        flash[:notice] = "Cheque number has been updated"
+        redirect_to("/view_this_voucher?voucher_id=#{params[:voucher_id]}") and return
+      else
+        flash[:error] = updated_voucher.errors.full_messages.join('<br />')
+        redirect_to("/update_cheque_number?voucher_id=#{params[:voucher_id]}") and return
+      end
+    end
+  end
   
 end
