@@ -44,6 +44,7 @@
   <div class="col-md-12">
     <div class="input-group" id="adv-search">
       <form class="form-horizontal" role="form" method="GET" action="/search_vouchers_menu" id="general-search-form">
+        <input type="hidden" value="true" name="search"/>
         <input type="text" name="voucher_number" value="<%= params[:voucher_number] %>" id="general-search" autocomplete="off" class="form-control" placeholder="Search voucher #" />
       </form>
       <div class="input-group-btn">
@@ -55,14 +56,15 @@
                 <div class="form-group">
                   <label for="filter">Filter by</label>
                   <select class="form-control" name="search_type">
-                    <option value="account_name">Account Name</option>
+                    <option value="account_name">Account name</option>
                     <option value="donor_code">Donor code</option>
                   </select>
                 </div>
                 <div class="form-group">
                   <label for="contain">Contains the words</label>
-                  <input class="form-control" type="text" name="search_words" />
+                  <input class="form-control" type="text" value="<%= params[:search_words] %>" name="search_words" />
                 </div>
+                <input type="hidden" value="true" name="search"/>
                 <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
               </form>
             </div>
@@ -74,6 +76,10 @@
   </div>
 </div><br /><br /><br />
 
+<% if params[:search] %>
+  <p class="main-detail h3 text-warning" style="margin-top: 0px;">Results found: <%= @search_results.count %></p><br />
+<% end %>
+  
 <table class="table">
   <thead>
     <tr>

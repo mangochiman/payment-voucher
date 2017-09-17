@@ -301,8 +301,22 @@ class PagesController < ApplicationController
     @page_header = "Search vouchers"
     @search_results = []
     if (params[:voucher_number])
-      @search_results = PaymentVoucher.search_by_voucher_number(params[:voucher_number])
+      voucher_number = params[:voucher_number]
+      @search_results = PaymentVoucher.search_by_voucher_number(voucher_number)
     end
+
+    unless (params[:search_type].blank?)
+      if (params[:search_type] == 'donor_code')
+        donor_code = params[:search_words]
+        @search_results = PaymentVoucher.search_by_donor_code(donor_code)
+      end
+
+      if (params[:search_type] == 'account_name')
+        account_name = params[:search_words]
+        @search_results = PaymentVoucher.search_by_account_name(account_name)
+      end
+    end
+    
   end
   
 end
