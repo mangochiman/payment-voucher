@@ -331,16 +331,33 @@ class PagesController < ApplicationController
 
   def voucher_downloadable
     @payment_voucher = PaymentVoucher.find(params[:voucher_id])
+    @workings = @payment_voucher.workings
+    sub_total = @payment_voucher.voucher_amount.to_f
+    user = User.find(params[:user_id])
+    @user = (user.first_name + " " + user.last_name) rescue nil
+    @workings.each do |payment_voucher_working|
+      plus_minus = payment_voucher_working.workings.value
+      workings_percent = payment_voucher_working.workings.percent
+      calculated_value = ((workings_percent.to_f/100) * @payment_voucher.voucher_amount.to_f)
+      payable_amount_string = "#{sub_total}#{plus_minus}#{calculated_value}"
+      #raise payable_amount_string.inspect
+      sub_total = eval(payable_amount_string)
+      #raise sub_total.inspect
+      #raise calculated_value.inspect
+    end
+    @payable_amount = sub_total
+    @page_header = "Viewing payment voucher #:  #{@payment_voucher.voucher_number}"
     render :layout => false
   end
   
   def print_voucher
     voucher_id = params[:voucher_id]
+    user_id = params[:user_id]
     voucher = PaymentVoucher.find(voucher_id)
     file_name = "voucher_#{voucher.payment_voucher_id}"
     t1 = Thread.new{
       Kernel.system "wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 http://" +
-        request.env["HTTP_HOST"] + "\"/voucher_downloadable?voucher_id=#{voucher_id}" + "\" /tmp/#{file_name}" + ".pdf \n"
+        request.env["HTTP_HOST"] + "\"/voucher_downloadable?voucher_id=#{voucher_id}&user_id=#{user_id}" + "\" /tmp/#{file_name}" + ".pdf \n"
     }
     t1.join
 

@@ -54,34 +54,34 @@
             float: center;
           }
 
-          table, table td, table thead{
+          table, table td, table thead, table thead th{
             border: 1px solid !important;
           }
 
-      </style>
+        </style>
 
-        <div class="row" style="left: -0px;">
+        <div class="row">
           <div class="col-md-12">
             <center>
               <img src="/images/baobab.png" class="baobab-logo"></img>
               <h2 style="color: black;">PAYMENT VOUCHER</h2>
             </center>
             <div style="padding-right: 100px;">
-              <strong>Cheque #:</strong>
-              <strong class="pull-right">Voucher #:</strong>
-            </div>
-
-            <div style="padding-right: 100px;">
-              <strong class="pull-right">Date:</strong>
+              <strong>Cheque #: <%= @payment_voucher.cheque_number %></strong>
+              <strong class="pull-right">Voucher #: <%= @payment_voucher.voucher_number %></strong>
             </div><br />
 
             <div style="padding-right: 100px;">
+              <strong class="pull-right">Date: <%= @payment_voucher.voucher_date.to_date.strftime("%d/%b/%Y") rescue @payment_voucher.voucher_date %></strong>
+            </div><br /><br />
+
+            <div style="padding-right: 100px;">
               <strong class="pull-right">Amount:</strong>
-            </div>
+            </div><br />
 
             <div>
               <strong class="pull-left">Payee Details:</strong>
-            </div> <br />
+            </div> <br /><br />
           </div>
 
         </div>
@@ -102,13 +102,34 @@
                     <td>As per attached</td>
                     <td><%=  @payment_voucher.expenditure_details %></td>
                     <%
-                    voucher_amount = number_to_currency(@payment_voucher.voucher_amount, :unit => "")
+                    voucher_amount = number_to_currency(@payable_amount, :unit => "")
 
                   %>
-                    <td><%= voucher_amount.split(".")[0] %></td>
-                    <td><%= voucher_amount.split(".")[1] %></td>
+                    <td><strong><%= voucher_amount.split(".")[0] %></strong></td>
+                    <td><strong><%= voucher_amount.split(".")[1] %></strong></td>
                   </tr>
-                  <% 3.times do %>
+                  <tr>
+                    <td>&nbsp;</td>
+                    <td>Subtotal  = <strong><%=  number_to_currency(@payment_voucher.voucher_amount.to_f, :unit => "") %></strong></td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                  </tr>
+
+                  <% @workings.each do |payment_voucher_working| %>
+                    <tr>
+                      <%
+                      workings_name = payment_voucher_working.workings.name
+                      workings_percent = payment_voucher_working.workings.percent
+                      calculated_value = ((workings_percent.to_f/100) * @payment_voucher.voucher_amount.to_f)
+                    %>
+                      <td>&nbsp;</td>
+                      <td><%= workings_name %> (<strong><%= workings_percent.to_s + "%" %></strong>) = <strong><%= number_to_currency(calculated_value, :unit => "") %> </strong></td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                    </tr>
+                  <% end %>
+
+                  <% 2.times do %>
                     <tr>
                       <td>&nbsp;</td>
                       <td>&nbsp;</td>
@@ -120,8 +141,8 @@
                     <td>&nbsp;</td>
                     <td><strong class="pull-right">Total</strong></td>
 
-                    <td><%= voucher_amount.split(".")[0] %></td>
-                    <td><%= voucher_amount.split(".")[1] %></td>
+                    <td><strong><%= voucher_amount.split(".")[0] %></strong></td>
+                    <td><strong><%= voucher_amount.split(".")[1] %></strong></td>
                   </tr>
                 </tbody>
               </table>
@@ -193,7 +214,7 @@
               <tbody>
                 <tr>
                   <td style="width: 200px; text-align: left;">Prepared by:</td>
-                  <td style="width: 400px;">&nbsp;</td>
+                  <td style="width: 400px;"><center><%= @user %></center></td>
                   <td>Cheque collected by:</td>
                   <td style="width: 400px;">&nbsp;</td>
                 </tr>
@@ -217,10 +238,8 @@
             </table>
           </div>
         </div>
-
       </div>
     </div>
-
     <script src="/AircraftAdmin-Free/lib/bootstrap/js/bootstrap.js"></script>
 
 

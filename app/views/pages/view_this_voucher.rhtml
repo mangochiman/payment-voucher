@@ -232,8 +232,9 @@
 <script type="text/javascript">
 
   var voucherId = "<%= params[:voucher_id] %>";
+  var user_id = "<%= session[:user].user_id %>"
   function downloadVoucherAsPDF(){
-    window.location = "/print_voucher?voucher_id=" + voucherId;
+    window.location = "/print_voucher?voucher_id=" + voucherId + "&user_id=" + user_id;
   }
 
   function editVoucher(){
