@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  skip_before_filter :authenticate_user, :only => [:login, :authenticate, :reset_password]
+  skip_before_filter :authenticate_user, :only => [:login, :authenticate, :reset_password, :voucher_downloadable, :print_voucher]
   before_filter :lock_screen_when_activated, :except => [:lock_screen, :unlock_screen, :login, :logout, :reset_password]
   
   def login
@@ -85,11 +85,6 @@ class PagesController < ApplicationController
     end
     @payable_amount = sub_total
     @page_header = "Viewing payment voucher #:  #{@payment_voucher.voucher_number}"
-  end
-
-  def voucher_downloadable
-    @payment_voucher = PaymentVoucher.find(params[:voucher_id])
-    render :layout => false
   end
   
   def view_voucher_menu
@@ -333,5 +328,24 @@ class PagesController < ApplicationController
       end
     end
   end
+
+  def voucher_downloadable
+    @payment_voucher = PaymentVoucher.find(params[:voucher_id])
+    render :layout => false
+  end
   
+  def print_voucher
+    voucher_id = params[:voucher_id]
+    voucher = PaymentVoucher.find(voucher_id)
+    file_name = "voucher_#{voucher.payment_voucher_id}"
+    t1 = Thread.new{
+      Kernel.system "wkhtmltopdf --margin-top 0 --margin-bottom 0 -s A4 http://" +
+        request.env["HTTP_HOST"] + "\"/voucher_downloadable?voucher_id=#{voucher_id}" + "\" /tmp/#{file_name}" + ".pdf \n"
+    }
+    t1.join
+
+    pdf_filename = "/tmp/#{file_name}.pdf"
+    send_file(pdf_filename, :filename => "#{file_name}", :type => "application/pdf")
+  end
+
 end

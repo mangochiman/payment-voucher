@@ -11,6 +11,7 @@ ActionController::Routing::Routes.draw do |map|
   map.update_cheque_number  '/update_cheque_number',  :controller => 'pages', :action => 'update_cheque_number'
   map.personal_details  '/personal_details',  :controller => 'pages', :action => 'personal_details'
   map.voucher_downloadable  '/voucher_downloadable',  :controller => 'pages', :action => 'voucher_downloadable'
+  map.print_voucher  '/print_voucher',  :controller => 'pages', :action => 'print_voucher'
   map.new_user  '/new_user',  :controller => 'pages', :action => 'new_user'
   map.update_user_profile  '/update_user_profile',  :controller => 'pages', :action => 'update_user_profile'
   map.view_users  '/view_users',  :controller => 'pages', :action => 'view_users'

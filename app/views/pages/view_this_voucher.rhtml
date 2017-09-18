@@ -205,11 +205,35 @@
   </div>
 </div>
 
+
+
+<!-- Modal -->
+<div class="modal fade" id="voidVoucherModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Void voucher</h4>
+      </div>
+      <div class="modal-body">
+        This will void the selected voucher. Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No, Am Not Sure</button>
+        <button onclick="voidVoucher();" type="button" class="btn btn-primary">Yes, Am Sure</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
 <script type="text/javascript">
 
   var voucherId = "<%= params[:voucher_id] %>";
   function downloadVoucherAsPDF(){
-    
+    window.location = "/print_voucher?voucher_id=" + voucherId;
   }
 
   function editVoucher(){
@@ -221,5 +245,26 @@
     updateChequelNumberURL = "/update_cheque_number?voucher_id=" + voucherId;
     window.location = updateChequelNumberURL;
   }
-  
+
+  function voidVoucherConfirm(){
+    jQuery('#voidVoucherModal').modal('show');
+  }
+
+  function voidVoucher(){
+    body = document.getElementsByTagName("body")[0];
+
+    form = document.createElement("form");
+    form.method = "POST"
+    form.action = "/void_voucher_menu";
+    body.appendChild(form);
+
+    input = document.createElement("input");
+    input.type = "hidden";
+    input.value = voucherId;
+    input.name = "voucher_id";
+    form.appendChild(input);
+
+    form.submit();
+
+  }
 </script>
