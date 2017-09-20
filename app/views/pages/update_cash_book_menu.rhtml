@@ -59,19 +59,54 @@
   </div>
 
   <div class="row" style="padding-left: 16px;">
-    <form action="/update_cheque_number" role="form" class="form-horizontal" id="cheque-number-form" method="POST">
+    <form action="/update_cash_book_menu" role="form" class="form-horizontal" id="cheque-book-form" method="POST">
       <input type="hidden" value="<%= @payment_voucher.payment_voucher_id %>" name="voucher_id"/>
 
       <div class="form-group pull-left">
         <div class="col-lg-7 ">
-          <input class="btn btn-danger" value="Update cash book"></input>
+          <input class="btn btn-danger" onclick="updateCashBookConfirm();" value="Update cash book"></input>
         </div>
       </div>
     </form>
   </div>
 </div>
 
-<style>
+<!-- Modal -->
+<div class="modal fade" id="updateCashBookConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Update cash book</h4>
+      </div>
+      <div class="modal-body">
+        You are about to update cash book for this voucher. Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No, Am Not Sure</button>
+        <button onclick="updateCashBook();" type="button" class="btn btn-primary">Yes, Am Sure</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<script type="text/javascript">
+
+  function updateCashBookConfirm(){
+    jQuery('#updateCashBookConfirmModal').modal('show');
+  }
+
+  function updateCashBook(){
+    chequeBookForm = document.getElementById("cheque-book-form");
+    chequeBookForm.submit();
+  }
+
+</script>
+
+<style type="text/css">
   .user-row {
     margin-bottom: 14px;
   }
