@@ -66,6 +66,7 @@ class PaymentVoucher < ActiveRecord::Base
   def update_cheque_number(params)
     payment_voucher = self
     payment_voucher.cheque_number = params[:cheque_number]
+    payment_voucher.payee = params[:payee]
     return payment_voucher
   end
   

@@ -3,6 +3,7 @@ class CreatePaymentVouchers < ActiveRecord::Migration
     create_table :payment_vouchers, :primary_key => :payment_voucher_id do |t|
       t.string :voucher_number
       t.string :cheque_number
+      t.string :payee
       t.date :voucher_date
       t.string :voucher_amount
       t.text :expenditure_details

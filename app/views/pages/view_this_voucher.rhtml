@@ -36,7 +36,7 @@
     </div><br />
 
     <div>
-      <strong class="pull-left">Payee Details:</strong>
+      <strong class="pull-left">Payee Details: <%= @payment_voucher.payee %></strong>
     </div> <br /><br />
   </div>
 
@@ -170,7 +170,7 @@
       <tbody>
         <tr>
           <td style="width: 200px; text-align: left;">Prepared by:</td>
-          <td style="width: 400px;">&nbsp;</td>
+          <td style="width: 400px;"><center><%= @user_details %></center></td>
           <td>Cheque collected by:</td>
           <td style="width: 400px;">&nbsp;</td>
         </tr>
