@@ -70,7 +70,7 @@
             <td>&nbsp;</td>
             <td>&nbsp;</td>
           </tr>
-          
+
           <% @workings.each do |payment_voucher_working| %>
             <tr>
               <%
@@ -230,7 +230,6 @@
 <!-- /.modal -->
 
 <script type="text/javascript">
-
   var voucherId = "<%= params[:voucher_id] %>";
   var user_id = "<%= session[:user].user_id %>"
   function downloadVoucherAsPDF(){
@@ -240,6 +239,11 @@
   function editVoucher(){
     editURL = "/edit_this_voucher?voucher_id=" + voucherId;
     window.location = editURL;
+  }
+
+  function updateCashBookConfirm(){
+    updateCashBookURL = "/update_cash_book_menu?voucher_id=" + voucherId;
+    window.location = updateCashBookURL;
   }
 
   function updateChequeDetails(){

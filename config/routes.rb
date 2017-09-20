@@ -9,6 +9,7 @@ ActionController::Routing::Routes.draw do |map|
   map.my_vouchers  '/my_vouchers',  :controller => 'pages', :action => 'my_vouchers'
   map.search_vouchers_menu  '/search_vouchers_menu',  :controller => 'pages', :action => 'search_vouchers_menu'
   map.update_cheque_number  '/update_cheque_number',  :controller => 'pages', :action => 'update_cheque_number'
+  map.update_cash_book_menu  '/update_cash_book_menu',  :controller => 'pages', :action => 'update_cash_book_menu'
   map.personal_details  '/personal_details',  :controller => 'pages', :action => 'personal_details'
   map.voucher_downloadable  '/voucher_downloadable',  :controller => 'pages', :action => 'voucher_downloadable'
   map.print_voucher  '/print_voucher',  :controller => 'pages', :action => 'print_voucher'

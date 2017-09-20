@@ -58,33 +58,19 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="row" style="padding-left: 16px;">
     <form action="/update_cheque_number" role="form" class="form-horizontal" id="cheque-number-form" method="POST">
+      <input type="hidden" value="<%= @payment_voucher.payment_voucher_id %>" name="voucher_id"/>
 
-      <div class="form-group">
-        <label class="control-label col-lg-3" for="cheque_number">Cheque Number</label>
-        <div class="col-lg-7">
-          <input type="text" name="cheque_number" value="<%= @payment_voucher.cheque_number %>" class="form-control" placeholder="Cheque #" id="cheque_number" autocomplete="off" required/>
-          <input type="hidden" value="<%= @payment_voucher.payment_voucher_id %>" name="voucher_id"/>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="control-label col-lg-3" for="payee_details">Payee Details</label>
-        <div class="col-lg-7">
-          <input type="text" name="payee" value="<%= @payment_voucher.payee %>" class="form-control" placeholder="Payee Details" id="payee_details" autocomplete="off" required/>
-        </div>
-      </div>
-
-      <div class="form-group modal-footer">
-        <label class="control-label col-lg-3" for="">&nbsp;</label>
-        <div class="col-lg-7">
-          <input class="btn btn-primary " type="submit" value="Update cheque details"></input>
+      <div class="form-group pull-left">
+        <div class="col-lg-7 ">
+          <input class="btn btn-danger" value="Update cash book"></input>
         </div>
       </div>
     </form>
   </div>
 </div>
+
 <style>
   .user-row {
     margin-bottom: 14px;

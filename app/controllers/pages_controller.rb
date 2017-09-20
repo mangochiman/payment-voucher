@@ -337,6 +337,11 @@ class PagesController < ApplicationController
     end
   end
 
+  def update_cash_book_menu
+    @payment_voucher = PaymentVoucher.find(params[:voucher_id])
+    @page_header = "Updating cash book for voucher #:  #{@payment_voucher.voucher_number}"
+  end
+
   def voucher_downloadable
     @payment_voucher = PaymentVoucher.find(params[:voucher_id])
     @workings = @payment_voucher.workings
