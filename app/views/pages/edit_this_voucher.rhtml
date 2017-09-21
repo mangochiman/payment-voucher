@@ -10,7 +10,7 @@
   <div class="form-group">
     <label class="control-label col-lg-3" for="voucher_date">Voucher Date</label>
     <div class="col-lg-7">
-      <input type="text" name="voucher_date" value="<%= @payment_voucher.voucher_date %>" class="form-control" placeholder="Voucher date" id="voucher_date" required/>
+      <input type="text" name="voucher_date" value="<%= @payment_voucher.voucher_date.to_date.strftime("%m/%d/%Y") rescue @payment_voucher.voucher_date%>" class="form-control datepicker" placeholder="Voucher date" id="voucher_date" required/>
     </div>
   </div>
 
