@@ -348,15 +348,6 @@ class PagesController < ApplicationController
       new_cashbook_path = "#{Rails.root}/doc/cash_book2.xls"
       cash_book = Spreadsheet.open file_path
       cash_book_sheet = cash_book.worksheet 0
-      
-      voucher_number = @payment_voucher.voucher_number
-      cheque_number = @payment_voucher.cheque_number
-      voucher_date = @payment_voucher.voucher_date.to_date.strftime("%d.%m.%Y")
-      voucher_amount = @payment_voucher.voucher_amount
-      expenditure_details = @payment_voucher.expenditure_details
-      account_name = @payment_voucher.account_name
-      donor_code = @payment_voucher.donor_code
-      payee_details = @payment_voucher.payee
 
       total_rows = cash_book_sheet.count
       rows = []
@@ -447,9 +438,27 @@ class PagesController < ApplicationController
 
         row_pos = row_pos + 1
       end
+
+      #voucher_number = @payment_voucher.voucher_number
+      cheque_number = @payment_voucher.cheque_number
+      voucher_date = @payment_voucher.voucher_date.to_date.strftime("%d.%m.%Y")
+      voucher_amount = @payment_voucher.voucher_amount
+      expenditure_details = @payment_voucher.expenditure_details
+      #account_name = @payment_voucher.account_name
+      #donor_code = @payment_voucher.donor_code
+      payee_details = @payment_voucher.payee
+
+      new_row_pos = row_pos
+      formulae = "=F#{new_row_pos}+E#{new_row_pos + 1}"
+      worksheet.write(new_row_pos, 0, voucher_date)
+      worksheet.write(new_row_pos, 1, cheque_number)
+      worksheet.write(new_row_pos, 2, payee_details)
+      worksheet.write(new_row_pos, 3, expenditure_details)
+      worksheet.write(new_row_pos, 4, -voucher_amount.to_i, number_red_format)
+      worksheet.write_formula(new_row_pos, 5,  formulae, number_red_format_condition)
       # write to file
       workbook.close
-      
+      `cp #{new_cashbook_path} #{file_path}`
       redirect_to("/update_cash_book_menu?voucher_id=#{params[:voucher_id]}") and return
     end
   end
