@@ -152,6 +152,8 @@
         </ul>
       </li>
       <li><a href="/search_vouchers_menu" class="nav-header"><i class="fa fa-fw fa-search"></i> Search vouchers</a></li>
+      <li><a href="/download_cash_book" class="nav-header"><i class="fa fa-fw fa-download"></i> Download Cash Book</a></li>
+      <li><a href="/upload_cash_book" class="nav-header"><i class="fa fa-fw fa-upload"></i> Upload Cash Book</a></li>
 
       <!--<li><a href="#" data-target=".report-menu" class="nav-header collapsed" data-toggle="collapse"><i class="fa fa-fw fa-bank"></i> Reports</a></li>
       <li>
@@ -179,7 +181,7 @@
     <div class="main-content">
       <div>
         <% if flash[:notice] %>
-        <center><span class="label label-success"><%= flash[:notice] %></span></center>
+          <center><span class="label label-success"><%= flash[:notice] %></span></center>
           <br />
         <% end %>
         <% if flash[:error] %>

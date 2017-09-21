@@ -10,6 +10,8 @@ ActionController::Routing::Routes.draw do |map|
   map.search_vouchers_menu  '/search_vouchers_menu',  :controller => 'pages', :action => 'search_vouchers_menu'
   map.update_cheque_number  '/update_cheque_number',  :controller => 'pages', :action => 'update_cheque_number'
   map.update_cash_book_menu  '/update_cash_book_menu',  :controller => 'pages', :action => 'update_cash_book_menu'
+  map.download_cash_book  '/download_cash_book',  :controller => 'pages', :action => 'download_cash_book'
+  map.upload_cash_book  '/upload_cash_book',  :controller => 'pages', :action => 'upload_cash_book'
   map.personal_details  '/personal_details',  :controller => 'pages', :action => 'personal_details'
   map.voucher_downloadable  '/voucher_downloadable',  :controller => 'pages', :action => 'voucher_downloadable'
   map.print_voucher  '/print_voucher',  :controller => 'pages', :action => 'print_voucher'

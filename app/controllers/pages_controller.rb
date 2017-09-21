@@ -463,6 +463,14 @@ class PagesController < ApplicationController
     end
   end
 
+  def download_cash_book
+
+  end
+
+  def upload_cash_book
+    @page_header = "Upload cash book"
+  end
+  
   def voucher_downloadable
     @payment_voucher = PaymentVoucher.find(params[:voucher_id])
     @workings = @payment_voucher.workings
