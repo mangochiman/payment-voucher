@@ -464,7 +464,14 @@ class PagesController < ApplicationController
   end
 
   def download_cash_book
-
+    file_path = "#{Rails.root}/doc/cash_book.xls"
+    if (File.file?(file_path))
+      send_file "#{file_path}", :disposition => "attachment"
+    else
+      flash[:error] = "No cash book was found"
+      redirect_to("#{request.referrer}") and return
+    end
+    
   end
 
   def upload_cash_book
