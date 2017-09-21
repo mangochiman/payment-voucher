@@ -11,6 +11,7 @@ class PaymentVoucher < ActiveRecord::Base
      payment_voucher.voucher_date = params[:voucher_date]
      payment_voucher.voucher_amount = params[:voucher_amount]
      payment_voucher.expenditure_details = params[:expenditure_details]
+     payment_voucher.payee = params[:payee]
      payment_voucher.account_name = params[:account_name]
      payment_voucher.donor_code = params[:donor_code]
      payment_voucher.prepared_by = params[:user_id]
@@ -23,6 +24,7 @@ class PaymentVoucher < ActiveRecord::Base
      payment_voucher.voucher_date = params[:voucher_date]
      payment_voucher.voucher_amount = params[:voucher_amount]
      payment_voucher.expenditure_details = params[:expenditure_details]
+     payment_voucher.payee = params[:payee]
      payment_voucher.account_name = params[:account_name]
      payment_voucher.donor_code = params[:donor_code]
      return payment_voucher
@@ -66,7 +68,6 @@ class PaymentVoucher < ActiveRecord::Base
   def update_cheque_number(params)
     payment_voucher = self
     payment_voucher.cheque_number = params[:cheque_number]
-    payment_voucher.payee = params[:payee]
     return payment_voucher
   end
   
