@@ -1,5 +1,6 @@
 require 'spreadsheet'
 require 'writeexcel'
+require 'fileutils'
 class PagesController < ApplicationController
   skip_before_filter :authenticate_user, :only => [:login, :authenticate, :reset_password, :voucher_downloadable, :print_voucher]
   before_filter :lock_screen_when_activated, :except => [:lock_screen, :unlock_screen, :login, :logout, :reset_password]
@@ -361,110 +362,131 @@ class PagesController < ApplicationController
     @payment_voucher = PaymentVoucher.find(params[:voucher_id])
     @page_header = "Updating cash book for voucher #:  #{@payment_voucher.voucher_number}"
     if request.post?
-      #update cashbook here
       file_path = "#{Rails.root}/doc/cash_book.xls"
       new_cashbook_path = "#{Rails.root}/doc/cash_book2.xls"
-      cash_book = Spreadsheet.open file_path
-      cash_book_sheet = cash_book.worksheet 0
-
-      total_rows = cash_book_sheet.count
-      rows = []
-
-      0.upto(total_rows - 1) do |i|
-        cell_0 = cash_book_sheet.rows[i][0] 
-        cell_1 = cash_book_sheet.rows[i][1]
-        cell_2 = cash_book_sheet.rows[i][2]
-        cell_3 = cash_book_sheet.rows[i][3]
-        cell_4 = cash_book_sheet.rows[i][4]
-        if cash_book_sheet.rows[i][5].class.name.match(/Spreadsheet::Formula/i)
-          cell_5 = (cash_book_sheet.rows[i][5]).value
-        else
-          cell_5 = cash_book_sheet.rows[i][5]
-        end
-        rows << [cell_0, cell_1, cell_2, cell_3, cell_4, cell_5]
-      end
-
-      workbook = WriteExcel.new(new_cashbook_path)
-
-      # Add worksheet(s)
-      worksheet  = workbook.add_worksheet
-      worksheet.set_column(0, 0, 15)
-      worksheet.set_column(0, 1, 20)
-      worksheet.set_column(0, 2, 20)
-      worksheet.set_column(0, 3, 20)
-      worksheet.set_column(0, 4, 20)
-      worksheet.set_column(0, 5, 20)
-      # Add and define a format
-      format = workbook.add_format
-      format.set_bold
-      format.set_align('right')
-
-      red_color = workbook.add_format
-      red_color.set_color('red')
-
-      bold_format = workbook.add_format
-      bold_format.set_bold
-      bold_format.set_align('center')
-
-      number_format = workbook.add_format
-      number_format.set_num_format('#,##0.00') # 1,234.56
-
-      number_red_format = workbook.add_format
-      number_red_format.set_color('red')
-      number_red_format.set_num_format('#,##0.00')
-
-      number_red_format_condition  = workbook.add_format
-      number_red_format_condition.set_num_format('#,##0.00')
-      number_red_format_condition.set_num_format('#,##0.00;[RED]-#,##0.00')
-
-      row_pos = 0
+      rows = cash_book_rows(file_path)
+      create_cash_book(new_cashbook_path, rows, @payment_voucher)
+      #check_for_cheque number duplicates
+      rows = cash_book_rows(new_cashbook_path)
+      data = {}
+      sort_value = 0
       rows.each do |row|
-        cell_0 = row[0]
-        cell_1 = row[1]
-        cell_2 = row[2]
-        cell_3 = row[3]
-        cell_4 = row[4]
-        cell_5 = row[5]
-        
-        if (row_pos == 0)
-          worksheet.write(row_pos, 0, cell_0, bold_format)
-          worksheet.write(row_pos, 1, cell_1, bold_format)
-          worksheet.write(row_pos, 2, cell_2, bold_format)
-          worksheet.write(row_pos, 3, cell_3, bold_format)
-          worksheet.write(row_pos, 4, cell_4, bold_format)
-          worksheet.write(row_pos, 5, cell_5, bold_format)
-        else
-          worksheet.write(row_pos, 0, cell_0)
-          worksheet.write(row_pos, 1, cell_1)
-          worksheet.write(row_pos, 2, cell_2)
-          worksheet.write(row_pos, 3, cell_3)
-          worksheet.write(row_pos, 4, cell_4, number_red_format)
-          
-          if (row_pos == 2)
-            worksheet.write(row_pos, 5, cell_5, number_format)
-          else
-            formulae = "=F#{row_pos}+E#{row_pos + 1}"
-            if cell_4.blank?
-              worksheet.write(row_pos, 5, cell_5)
-            else
-              worksheet.write_formula(row_pos, 5,  formulae, number_red_format_condition)
-            end
-            
-          end
-          
-        end
-
-        row_pos = row_pos + 1
+        cheque_number = row[1]
+        cheque_number = 0 if cheque_number.blank?
+        data[cheque_number] = {}
+        data[cheque_number]["row"] = row
+        data[cheque_number]["sort_value"] = sort_value
+        sort_value = sort_value + 1
       end
 
-      #voucher_number = @payment_voucher.voucher_number
-      cheque_number = @payment_voucher.cheque_number
-      voucher_date = @payment_voucher.voucher_date.to_date.strftime("%d.%m.%Y")
-      voucher_amount = @payment_voucher.voucher_amount
-      expenditure_details = @payment_voucher.expenditure_details
-      #account_name = @payment_voucher.account_name
-      #donor_code = @payment_voucher.donor_code
-      payee_details = @payment_voucher.payee
+      #raise data.inspect
+      sorted_data = data.sort_by{|k, v|v["sort_value"]}
+      rows = []
+      sorted_data.each do |key, values|
+        rows << values["row"]
+      end
+      
+      create_cash_book(new_cashbook_path, rows, @payment_voucher, false) #remove duplicates
+      
+      `cp #{new_cashbook_path} #{file_path}`
+      redirect_to("/update_cash_book_menu?voucher_id=#{params[:voucher_id]}") and return
+    end
+  end
+
+  def cash_book_rows(file_path)
+    cash_book = Spreadsheet.open file_path
+    cash_book_sheet = cash_book.worksheet 0
+    total_rows = cash_book_sheet.count
+    rows = []
+    0.upto(total_rows - 1) do |i|
+      cell_0 = cash_book_sheet.rows[i][0]
+      cell_1 = cash_book_sheet.rows[i][1]
+      cell_2 = cash_book_sheet.rows[i][2]
+      cell_3 = cash_book_sheet.rows[i][3]
+      cell_4 = cash_book_sheet.rows[i][4]
+      if cash_book_sheet.rows[i][5].class.name.match(/Spreadsheet::Formula/i)
+        cell_5 = (cash_book_sheet.rows[i][5]).value
+      else
+        cell_5 = cash_book_sheet.rows[i][5]
+      end
+      rows << [cell_0, cell_1, cell_2, cell_3, cell_4, cell_5]
+    end
+    return rows
+  end
+  
+  def create_cash_book(new_cashbook_path, rows, payment_voucher, new_entry = true)
+    workbook = WriteExcel.new(new_cashbook_path)
+    worksheet  = workbook.add_worksheet
+    worksheet.set_column(0, 0, 15)
+    worksheet.set_column(0, 1, 20)
+    worksheet.set_column(0, 2, 20)
+    worksheet.set_column(0, 3, 20)
+    worksheet.set_column(0, 4, 20)
+    worksheet.set_column(0, 5, 20)
+    # Add and define a format
+    format = workbook.add_format
+    format.set_bold
+    format.set_align('right')
+
+    red_color = workbook.add_format
+    red_color.set_color('red')
+
+    bold_format = workbook.add_format
+    bold_format.set_bold
+    bold_format.set_align('center')
+
+    number_format = workbook.add_format
+    number_format.set_num_format('#,##0.00') # 1,234.56
+
+    number_red_format = workbook.add_format
+    number_red_format.set_color('red')
+    number_red_format.set_num_format('#,##0.00')
+
+    number_red_format_condition  = workbook.add_format
+    number_red_format_condition.set_num_format('#,##0.00')
+    number_red_format_condition.set_num_format('#,##0.00;[RED]-#,##0.00')
+
+    row_pos = 0
+    rows.each do |row|
+      cell_0 = row[0]
+      cell_1 = row[1]
+      cell_2 = row[2]
+      cell_3 = row[3]
+      cell_4 = row[4]
+      cell_5 = row[5]
+      if (row_pos == 0)
+        worksheet.write(row_pos, 0, cell_0, bold_format)
+        worksheet.write(row_pos, 1, cell_1, bold_format)
+        worksheet.write(row_pos, 2, cell_2, bold_format)
+        worksheet.write(row_pos, 3, cell_3, bold_format)
+        worksheet.write(row_pos, 4, cell_4, bold_format)
+        worksheet.write(row_pos, 5, cell_5, bold_format)
+      else
+        worksheet.write(row_pos, 0, cell_0)
+        worksheet.write(row_pos, 1, cell_1)
+        worksheet.write(row_pos, 2, cell_2)
+        worksheet.write(row_pos, 3, cell_3)
+        worksheet.write(row_pos, 4, cell_4, number_red_format)
+        if (row_pos == 1)
+          worksheet.write(row_pos, 5, cell_5, number_format)
+        else
+          formulae = "=F#{row_pos}+E#{row_pos + 1}"
+          if cell_4.blank?
+            worksheet.write(row_pos, 5, cell_5)
+          else
+            worksheet.write_formula(row_pos, 5,  formulae, number_red_format_condition)
+          end
+        end
+      end
+      row_pos = row_pos + 1
+    end
+
+    if (new_entry)
+      cheque_number = payment_voucher.cheque_number
+      voucher_date = payment_voucher.voucher_date.to_date.strftime("%d.%m.%Y")
+      voucher_amount = payment_voucher.voucher_amount
+      expenditure_details = payment_voucher.expenditure_details
+      payee_details = payment_voucher.payee
 
       new_row_pos = row_pos
       formulae = "=F#{new_row_pos}+E#{new_row_pos + 1}"
@@ -474,11 +496,10 @@ class PagesController < ApplicationController
       worksheet.write(new_row_pos, 3, expenditure_details)
       worksheet.write(new_row_pos, 4, -voucher_amount.to_i, number_red_format)
       worksheet.write_formula(new_row_pos, 5,  formulae, number_red_format_condition)
-      # write to file
-      workbook.close
-      `cp #{new_cashbook_path} #{file_path}`
-      redirect_to("/update_cash_book_menu?voucher_id=#{params[:voucher_id]}") and return
     end
+
+    # write to file
+    workbook.close
   end
 
   def download_cash_book
@@ -494,6 +515,19 @@ class PagesController < ApplicationController
 
   def upload_cash_book
     @page_header = "Upload cash book"
+
+    if request.post?
+      uploaded_io = params["input-file"]
+      file_extension =  File.extname(uploaded_io.original_filename)
+      new_name = "cash_book"
+      new_file_name = new_name.to_s + file_extension.to_s
+      File.open(Rails.root.join('doc' , new_file_name), 'wb') do |file|
+        file.write(uploaded_io.read)
+      end
+      flash[:notice] = "Cash book has been uploaded successfully"
+      redirect_to("/") and return
+    end
+    
   end
   
   def voucher_downloadable

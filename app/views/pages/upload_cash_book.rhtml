@@ -1,0 +1,90 @@
+<style type="text/css">
+  .container{
+    margin-top:20px;
+  }
+  .image-preview-input {
+    position: relative;
+    overflow: hidden;
+    margin: 0px;
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+  }
+  .image-preview-input input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+  }
+  .image-preview-input-title {
+    margin-left:2px;
+  }
+</style>
+
+<div class="container">
+  <form action="#" method="POST" enctype="multipart/form-data">
+    <div class="alert alert-warning col-xs-6 col-md-9 ">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+      Do this sparingly!!. You are being warned that by doing this you understand the consequences.
+      <p>*This will overwrite the existing cash book on the server</p>
+      <p>*If the format of the cashbook differs with the one that is recommended, system errors might occur</p>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-md-7 col-md-offset-1">
+        <!-- image-preview-filename input [CUT FROM HERE]-->
+        <div class="input-group image-preview">
+          <input type="text" class="form-control image-preview-filename" disabled="disabled"/> <!-- don't give a name === doesn't send on POST/GET -->
+          <span class="input-group-btn">
+            <!-- image-preview-clear button -->
+            <button type="button" class="btn btn-default image-preview-clear" style="display:none;">
+              <span class="glyphicon glyphicon-remove"></span> Clear
+            </button>
+            <!-- image-preview-input -->
+            <div class="btn btn-default image-preview-input">
+              <span class="glyphicon glyphicon-folder-open"></span>
+              <span class="image-preview-input-title">Browse</span>
+              <input type="file" required accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, application/vnd.oasis.opendocument.spreadsheet" name="input-file"/>
+            </div>
+          </span>
+        </div><!-- /input-group image-preview [TO HERE]-->
+      </div>
+    </div>
+
+    <div class="form-group modal-footer">
+      <div class="col-lg-7">
+        <input class="btn btn-primary " type="submit" value="Submit cash book"></input>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<script type="text/javascript">
+  $(".image-preview-input input:file").change(function (){
+    var file = this.files[0];
+    var reader = new FileReader();
+    // Set preview image into the popover data-content
+    // Clear event
+    $('.image-preview-clear').click(function(){
+      $('.image-preview').attr("data-content","").popover('hide');
+      $('.image-preview-filename').val("");
+      $('.image-preview-clear').hide();
+      $('.image-preview-input input:file').val("");
+      $(".image-preview-input-title").text("Browse");
+    });
+    
+    reader.onload = function (e) {
+      $(".image-preview-input-title").text("Change");
+      $(".image-preview-clear").show();
+      $(".image-preview-filename").val(file.name);
+      $(".image-preview").attr("data-content",$(img)[0].outerHTML).popover("show");
+    }
+    reader.readAsDataURL(file);
+  });
+</script>
