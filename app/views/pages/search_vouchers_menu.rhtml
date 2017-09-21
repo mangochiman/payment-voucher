@@ -87,6 +87,7 @@
       <th>Voucher Date</th>
       <th>Voucher Amount</th>
       <th>Expenditure Details</th>
+      <th>Payee Details</th>
       <th>Account Name</th>
       <th>Donor Code</th>
       <th style="width: 3.5em;"></th>
@@ -99,6 +100,7 @@
         <td><%= payment_voucher.voucher_date.to_date.strftime("%d/%b/%Y") rescue payment_voucher.voucher_date  %></td>
         <td><%= number_to_currency(payment_voucher.voucher_amount, :unit => "MWK ") %></td>
         <td><%= payment_voucher.expenditure_details %></td>
+        <td><%= payment_voucher.payee %></td>
         <td><%= payment_voucher.account_name %></td>
         <td><%= payment_voucher.donor_code %></td>
         <td>
