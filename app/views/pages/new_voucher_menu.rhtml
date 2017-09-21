@@ -51,14 +51,29 @@
 
   <div class="form-group">
     <label class="control-label col-lg-3" style="width: 339px; padding-right: 28px;">Workings</label>
-    <% @workings.each do |workings| %>
-      <label class="checkbox-inline" style="width: 10%;">
-        <input type="checkbox" onchange="hackRequiredWorkings(this);" name="workings[]" value="<%= workings.workings_id %>" required="true"/><span style="padding-top: 3px; position: absolute;"><%= workings.name %> (<strong><%= workings.percent.to_s + "%"%></strong>)</span>
-      </label>
-    <% end %>
   </div>
 
   <input type="hidden" name="user_id" value="<%= session[:user].user_id %>"/>
+
+  <% @workings.each do |workings| %>
+    <div class="row" style="padding-left: 356px;">
+      <div>
+        <div class="form-group">
+          <input type="checkbox" name="workings[]" checked="false" value="<%= workings.id %>" id="fancy-checkbox-default_<%= workings.id %>" autocomplete="off" />
+          <div class="btn-group">
+            <label for="fancy-checkbox-default_<%= workings.id %>" class="btn btn-default">
+              <span class="glyphicon glyphicon-ok"></span>
+              <span> </span>
+            </label>
+            <label for="fancy-checkbox-default_<%= workings.id %>" class="btn btn-default">
+              <%= workings.name %> (<%= workings.percent.to_s + "%" %>)
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <% end %>
 
   <div class="form-group modal-footer">
     <label class="control-label col-lg-3" for="">&nbsp;</label>
@@ -94,3 +109,27 @@
   }
 
 </script>
+
+<style>
+  .form-group input[type="checkbox"] {
+    display: none;
+  }
+
+  .form-group input[type="checkbox"] + .btn-group > label span {
+    width: 20px;
+  }
+
+  .form-group input[type="checkbox"] + .btn-group > label span:first-child {
+    display: none;
+  }
+  .form-group input[type="checkbox"] + .btn-group > label span:last-child {
+    display: inline-block;
+  }
+
+  .form-group input[type="checkbox"]:checked + .btn-group > label span:first-child {
+    display: inline-block;
+  }
+  .form-group input[type="checkbox"]:checked + .btn-group > label span:last-child {
+    display: none;
+  }
+</style>
