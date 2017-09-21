@@ -28,6 +28,24 @@ class PagesController < ApplicationController
   
   def home
     @page_header = "Dashboard"
+    start_day_date = Date.today
+    end_day_date = Date.today
+
+    start_week_date = Date.today.beginning_of_week - 1.day #sunday
+    end_week_date = start_week_date + 6.days #saturday
+
+    start_month_date = Date.today.beginning_of_month
+    end_month_date = Date.today.end_of_month
+
+    start_year_date = Date.today.beginning_of_year
+    end_year_date = Date.today.end_of_year
+
+    todays_vouchers = PaymentVoucher.vouchers_by_date_range(start_day_date, end_day_date)
+    @payment_vouchers = todays_vouchers
+    @todays_vouchers = todays_vouchers.count
+    @this_weeks_vouchers = PaymentVoucher.vouchers_by_date_range(start_week_date, end_week_date).count
+    @this_months_vouchers = PaymentVoucher.vouchers_by_date_range(start_month_date, end_month_date).count
+    @this_year_vouchers = PaymentVoucher.vouchers_by_date_range(start_year_date, end_year_date).count
   end
 
   def new_voucher_menu

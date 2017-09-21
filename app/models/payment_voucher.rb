@@ -6,28 +6,28 @@ class PaymentVoucher < ActiveRecord::Base
   default_scope :conditions => "#{self.table_name}.voided = 0"
   
   def self.new_payment_voucher(params)
-     payment_voucher = PaymentVoucher.new
-     payment_voucher.voucher_number = params[:voucher_number]
-     payment_voucher.voucher_date = params[:voucher_date]
-     payment_voucher.voucher_amount = params[:voucher_amount]
-     payment_voucher.expenditure_details = params[:expenditure_details]
-     payment_voucher.payee = params[:payee]
-     payment_voucher.account_name = params[:account_name]
-     payment_voucher.donor_code = params[:donor_code]
-     payment_voucher.prepared_by = params[:user_id]
-     return payment_voucher
+    payment_voucher = PaymentVoucher.new
+    payment_voucher.voucher_number = params[:voucher_number]
+    payment_voucher.voucher_date = params[:voucher_date]
+    payment_voucher.voucher_amount = params[:voucher_amount]
+    payment_voucher.expenditure_details = params[:expenditure_details]
+    payment_voucher.payee = params[:payee]
+    payment_voucher.account_name = params[:account_name]
+    payment_voucher.donor_code = params[:donor_code]
+    payment_voucher.prepared_by = params[:user_id]
+    return payment_voucher
   end
 
   def self.edit_payment_voucher(params)
-     payment_voucher = PaymentVoucher.find(params[:voucher_id])
-     payment_voucher.voucher_number = params[:voucher_number]
-     payment_voucher.voucher_date = params[:voucher_date]
-     payment_voucher.voucher_amount = params[:voucher_amount]
-     payment_voucher.expenditure_details = params[:expenditure_details]
-     payment_voucher.payee = params[:payee]
-     payment_voucher.account_name = params[:account_name]
-     payment_voucher.donor_code = params[:donor_code]
-     return payment_voucher
+    payment_voucher = PaymentVoucher.find(params[:voucher_id])
+    payment_voucher.voucher_number = params[:voucher_number]
+    payment_voucher.voucher_date = params[:voucher_date]
+    payment_voucher.voucher_amount = params[:voucher_amount]
+    payment_voucher.expenditure_details = params[:expenditure_details]
+    payment_voucher.payee = params[:payee]
+    payment_voucher.account_name = params[:account_name]
+    payment_voucher.donor_code = params[:donor_code]
+    return payment_voucher
   end
 
   def self.void_voucher(voucher_id)
@@ -69,6 +69,12 @@ class PaymentVoucher < ActiveRecord::Base
     payment_voucher = self
     payment_voucher.cheque_number = params[:cheque_number]
     return payment_voucher
+  end
+
+  def self.vouchers_by_date_range(start_date, end_date)
+    payment_vouchers = PaymentVoucher.find(:all, :conditions => ["DATE(created_at) >= ? AND DATE(created_at) <= ?",
+        start_date, end_date])
+    return payment_vouchers
   end
   
 end
