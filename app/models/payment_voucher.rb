@@ -2,6 +2,8 @@ class PaymentVoucher < ActiveRecord::Base
   set_table_name :payment_vouchers
   set_primary_key :payment_voucher_id
 
+  #validates :voucher_amount, format: { with: /\A\d+\z/, message: "Integer only. No sign allowed." }
+  validates_numericality_of :voucher_amount, :only_float => true
   has_many :workings, :class_name => "PaymentVoucherWorkings",  :foreign_key => :payment_voucher_id
   default_scope :conditions => "#{self.table_name}.voided = 0"
   
@@ -28,6 +30,26 @@ class PaymentVoucher < ActiveRecord::Base
     payment_voucher.account_name = params[:account_name]
     payment_voucher.donor_code = params[:donor_code]
     return payment_voucher
+  end
+
+  def updating_workings(params)
+    payment_voucher = self
+    workings = payment_voucher.workings
+    
+    ActiveRecord::Base.transaction do
+      workings.each do |working|
+        working.voided = 1
+        working.save
+      end
+
+      params[:workings].each do |working_id|
+        payment_voucher_workings = PaymentVoucherWorkings.new
+        payment_voucher_workings.payment_voucher_id = payment_voucher.payment_voucher_id
+        payment_voucher_workings.workings_id = working_id
+        payment_voucher_workings.save
+      end
+    end
+    
   end
 
   def self.void_voucher(voucher_id)
@@ -75,6 +97,23 @@ class PaymentVoucher < ActiveRecord::Base
     payment_vouchers = PaymentVoucher.find(:all, :conditions => ["DATE(created_at) >= ? AND DATE(created_at) <= ?",
         start_date, end_date])
     return payment_vouchers
+  end
+
+  def payable_amount
+    payment_voucher =self
+    workings = payment_voucher.workings
+    sub_total = payment_voucher.voucher_amount.to_f
+    
+    workings.each do |payment_voucher_working|
+      plus_minus = payment_voucher_working.workings.value
+      workings_percent = payment_voucher_working.workings.percent
+      calculated_value = ((workings_percent.to_f/100) * payment_voucher.voucher_amount.to_f)
+      payable_amount_string = "#{sub_total}#{plus_minus}#{calculated_value}"
+      sub_total = eval(payable_amount_string)
+    end
+
+    payable_amount = sub_total
+    return payable_amount
   end
   
 end

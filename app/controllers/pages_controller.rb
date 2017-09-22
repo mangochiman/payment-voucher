@@ -77,15 +77,22 @@ class PagesController < ApplicationController
   def edit_this_voucher
     @payment_voucher = PaymentVoucher.find(params[:voucher_id])
     @page_header = "Editing payment voucher #:  #{@payment_voucher.voucher_number}"
-
+    @workings = Workings.find(:all)
+    @my_workings = @payment_voucher.workings
+    
     if request.post?
+      if params[:workings].blank?
+        flash[:error] = "Record update failed. No workings were selected"
+        redirect_to("/edit_this_voucher?voucher_id=#{params[:voucher_id]}") and return
+      end
       edit_payment_voucher = PaymentVoucher.edit_payment_voucher(params)
       if edit_payment_voucher.save
+        edit_payment_voucher.updating_workings(params)
         flash[:notice] = "Payment voucher was updated"
-        redirect_to("/edit_voucher_menu")
+        redirect_to("/edit_voucher_menu") and return
       else
-        flash[:error] = "Failed to update the voucher"
-        redirect_to("/edit_this_voucher?voucher_id=#{params[:voucher_id]}")
+        flash[:error] = edit_payment_voucher.errors.full_messages.join('<br />')
+        redirect_to("/edit_this_voucher?voucher_id=#{params[:voucher_id]}") and return
       end
     end
   end
@@ -484,7 +491,7 @@ class PagesController < ApplicationController
     if (new_entry)
       cheque_number = payment_voucher.cheque_number
       voucher_date = payment_voucher.voucher_date.to_date.strftime("%d.%m.%Y")
-      voucher_amount = payment_voucher.voucher_amount
+      payable_amount = payment_voucher.payable_amount
       expenditure_details = payment_voucher.expenditure_details
       payee_details = payment_voucher.payee
 
@@ -494,7 +501,7 @@ class PagesController < ApplicationController
       worksheet.write(new_row_pos, 1, cheque_number)
       worksheet.write(new_row_pos, 2, payee_details)
       worksheet.write(new_row_pos, 3, expenditure_details)
-      worksheet.write(new_row_pos, 4, -voucher_amount.to_i, number_red_format)
+      worksheet.write(new_row_pos, 4, -payable_amount.to_i, number_red_format)
       worksheet.write_formula(new_row_pos, 5,  formulae, number_red_format_condition)
     end
 

@@ -5,6 +5,8 @@ class PaymentVoucherWorkings < ActiveRecord::Base
   belongs_to :payment_voucher, :foreign_key => :payment_voucher_id
   belongs_to :workings, :foreign_key => :workings_id
 
+  default_scope :conditions => "#{self.table_name}.voided = 0"
+  
   def self.create_workings(payment_voucher_id, params)
     params[:workings].each do |working_id|
       payment_voucher_working = PaymentVoucherWorkings.new
