@@ -30,10 +30,14 @@
                     <td><strong><%= @payment_voucher.voucher_date %></strong></td>
                   </tr>
                   <tr>
-                    <td>Voucher Amount</td>
+                    <td>Sub Total</td>
                     <td><strong><%= number_to_currency(@payment_voucher.voucher_amount, :unit => "") %></strong></td>
                   </tr>
 
+                  <tr>
+                    <td>Payable Amount</td>
+                    <td><strong><%= number_to_currency(@payment_voucher.payable_amount, :unit => "") %></strong></td>
+                  </tr>
                   <tr>
                     <td>Details of expenditure</td>
                     <td><strong><%= @payment_voucher.expenditure_details %></strong></td>
