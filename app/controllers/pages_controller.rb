@@ -573,8 +573,13 @@ class PagesController < ApplicationController
     @payment_voucher = PaymentVoucher.find(params[:voucher_id])
     @workings = @payment_voucher.workings
     sub_total = @payment_voucher.voucher_amount.to_f
-    user = User.find(params[:user_id])
-    @user = (user.first_name + " " + user.last_name) rescue nil
+    @user_details = ""
+    user = User.find(@payment_voucher.prepared_by) rescue nil
+    unless user.blank?
+      fname = user.first_name.capitalize.to_s rescue user.first_name
+      lname = user.last_name.capitalize.to_s rescue user.last_name
+      @user_details = (fname + " " + lname)
+    end
     @workings.each do |payment_voucher_working|
       plus_minus = payment_voucher_working.workings.value
       workings_percent = payment_voucher_working.workings.percent

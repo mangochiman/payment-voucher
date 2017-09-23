@@ -80,7 +80,7 @@
             </div><br />
 
             <div>
-              <strong class="pull-left">Payee Details:</strong>
+              <strong class="pull-left">Payee Details: <%= @payment_voucher %></strong>
             </div> <br /><br />
           </div>
 
@@ -99,7 +99,7 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td>As per attached</td>
+                    <td style="width: 160px;">As per attached</td>
                     <td><%=  @payment_voucher.expenditure_details %></td>
                     <%
                     voucher_amount = number_to_currency(@payable_amount, :unit => "")
@@ -116,7 +116,7 @@
                   </tr>
 
                   <% @workings.each do |payment_voucher_working| %>
-                    <tr>
+                    <tr style="height: 18px;">
                       <%
                       workings_name = payment_voucher_working.workings.name
                       workings_percent = payment_voucher_working.workings.percent
@@ -214,8 +214,8 @@
               <tbody>
                 <tr>
                   <td style="width: 200px; text-align: left;">Prepared by:</td>
-                  <td style="width: 400px;"><center><%= @user %></center></td>
-                  <td>Cheque collected by:</td>
+                  <td style="width: 400px;"><center><%= @user_details %></center></td>
+                  <td style="width: 200px;">Cheque collected by:</td>
                   <td style="width: 400px;">&nbsp;</td>
                 </tr>
                 <tr>

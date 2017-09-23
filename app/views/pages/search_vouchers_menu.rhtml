@@ -84,6 +84,7 @@
   <thead>
     <tr>
       <th>Voucher #</th>
+      <th>Cheque #</th>
       <th>Voucher Date</th>
       <th>Sub Total</th>
       <th>Payable Amount</th>
@@ -98,6 +99,7 @@
     <% @search_results.each do |payment_voucher| %>
       <tr>
         <td><%= payment_voucher.voucher_number %></td>
+        <td style="text-align: right;"><%= payment_voucher.cheque_number %></td>
         <td><%= payment_voucher.voucher_date.to_date.strftime("%d/%b/%Y") rescue payment_voucher.voucher_date  %></td>
         <td><%= number_to_currency(payment_voucher.voucher_amount, :unit => "MWK ") %></td>
         <td><%= number_to_currency(payment_voucher.payable_amount, :unit => "MWK ") %></td>
