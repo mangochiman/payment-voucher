@@ -371,6 +371,13 @@ class PagesController < ApplicationController
       file_path = "#{Rails.root}/doc/cash_book.xls"
       new_cashbook_path = "#{Rails.root}/doc/cash_book2.xls"
       rows = cash_book_rows(file_path)
+      current_cash_book_balance = PaymentVoucher.current_cash_book_balance(rows)
+      if (current_cash_book_balance < 0)
+        session[:cash_balance] = current_cash_book_balance
+        session[:voucher_id] = params[:voucher_id]
+        redirect_to("/insufficient_balance") and return
+      end
+      #raise rows.last.inspect
       create_cash_book(new_cashbook_path, rows, @payment_voucher)
       #check_for_cheque number duplicates
       rows = cash_book_rows(new_cashbook_path)
@@ -393,11 +400,22 @@ class PagesController < ApplicationController
     end
   end
 
+  def insufficient_balance
+    @payment_voucher = PaymentVoucher.find(session[:voucher_id]) rescue nil
+    if @payment_voucher.blank?
+      flash[:error] = "Something went wrong"
+      redirect_to("/") and return
+    end
+    @cash_balance = session[:cash_balance]
+    @page_header = "Insufficient balance for voucher #:  #{@payment_voucher.voucher_number}"
+  end
+  
   def cash_book_rows(file_path)
     cash_book = Spreadsheet.open file_path
     cash_book_sheet = cash_book.worksheet 0
     total_rows = cash_book_sheet.count
     rows = []
+    current_balance = 0
     0.upto(total_rows - 1) do |i|
       cell_0 = cash_book_sheet.rows[i][0]
       cell_1 = cash_book_sheet.rows[i][1]
@@ -408,12 +426,18 @@ class PagesController < ApplicationController
         cell_5 = cash_book_sheet.rows[i][5]
       end
 
+      if i == 1
+        current_balance =  cell_5.to_f
+      end
       if (i ==1)
         cell_5 = cash_book_sheet.rows[i][5]
       end
 
       if (i > i)
         cell_5 = ""
+      end
+      if current_balance > 0
+        current_balance = current_balance.to_f + cell_4.to_f
       end
       rows << [cell_0, cell_1, cell_2, cell_3, cell_4, cell_5]
     end

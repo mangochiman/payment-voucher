@@ -115,5 +115,21 @@ class PaymentVoucher < ActiveRecord::Base
     payable_amount = sub_total
     return payable_amount
   end
+
+  def self.current_cash_book_balance(data)
+    current_balance = 0
+    total_rows = data.length
+    0.upto(total_rows - 1) do |i|
+      payable_amount = data[i][4].to_f
+      if i == 1
+        current_balance =  data[i][5] #opening balance
+      end
+      if i > 1
+        current_balance = current_balance.to_f + payable_amount
+      end
+    end
+    
+    return current_balance
+  end
   
 end

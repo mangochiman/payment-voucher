@@ -1,0 +1,22 @@
+<div class="modal in" style="display: block; margin-top: 110px;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Insufficient Balance</h4>
+      </div>
+      <div class="modal-body">
+        <p>
+          Are you sure you want to continue updating cash book when there is insufficient balance?
+          Current balance as of today is <b style="color: red;"><%= number_to_currency(@cash_balance, :unit => "MWK ") %></b>
+        </p>
+        <div class="row">
+          <div class="col-12-xs pull-right">
+            <button class="btn btn-success btn-md">Yes update cash book</button>
+            <button class="btn btn-danger btn-md">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

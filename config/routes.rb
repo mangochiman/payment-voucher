@@ -12,6 +12,7 @@ ActionController::Routing::Routes.draw do |map|
   map.update_cash_book_menu  '/update_cash_book_menu',  :controller => 'pages', :action => 'update_cash_book_menu'
   map.download_cash_book  '/download_cash_book',  :controller => 'pages', :action => 'download_cash_book'
   map.upload_cash_book  '/upload_cash_book',  :controller => 'pages', :action => 'upload_cash_book'
+  map.insufficient_balance  '/insufficient_balance',  :controller => 'pages', :action => 'insufficient_balance'
   map.personal_details  '/personal_details',  :controller => 'pages', :action => 'personal_details'
   map.voucher_downloadable  '/voucher_downloadable',  :controller => 'pages', :action => 'voucher_downloadable'
   map.print_voucher  '/print_voucher',  :controller => 'pages', :action => 'print_voucher'
