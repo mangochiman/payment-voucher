@@ -8,11 +8,11 @@
         <p>
           Are you sure you want to continue updating cash book when there is insufficient balance?
           Current balance as of today is <b style="color: red;"><%= number_to_currency(@cash_balance, :unit => "MWK ") %></b>
-        </p>
+        </p><br />
         <div class="row">
           <div class="col-12-xs pull-right">
-            <button class="btn btn-success btn-md">Yes update cash book</button>
-            <button class="btn btn-danger btn-md">Cancel</button>
+            <button class="btn btn-success btn-md" onclick="updateCashBook()">Yes update cash book</button>
+            <button class="btn btn-danger btn-md" onclick="cancelCashBookUpdate();">Cancel</button>
           </div>
         </div>
       </div>
@@ -20,3 +20,35 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+
+<script type="text/javascript">
+  var voucher_id = '<%= @payment_voucher.payment_voucher_id %>';
+  function cancelCashBookUpdate(){
+    window.location = "update_cash_book_menu?voucher_id=" + voucher_id;
+  }
+
+  function updateCashBook(){
+    body = document.getElementsByTagName("body")[0];
+
+    form = document.createElement("form");
+    form.method = "POST"
+    form.action = "/update_cash_book_menu";
+    body.appendChild(form);
+
+    input = document.createElement("input");
+    input.type = "hidden";
+    input.value = voucher_id;
+    input.name = "voucher_id";
+    form.appendChild(input);
+
+    input = document.createElement("input");
+    input.type = "hidden";
+    input.value = "yes";
+    input.name = "confirm_update";
+    form.appendChild(input);
+    
+    form.submit();
+  }
+  
+</script>

@@ -367,17 +367,23 @@ class PagesController < ApplicationController
   def update_cash_book_menu
     @payment_voucher = PaymentVoucher.find(params[:voucher_id])
     @page_header = "Updating cash book for voucher #:  #{@payment_voucher.voucher_number}"
+    session.delete(:cash_balance) if session[:cash_balance]
+    session.delete(:voucher_id) if session[:voucher_id]
+
     if request.post?
       file_path = "#{Rails.root}/doc/cash_book.xls"
       new_cashbook_path = "#{Rails.root}/doc/cash_book2.xls"
       rows = cash_book_rows(file_path)
       current_cash_book_balance = PaymentVoucher.current_cash_book_balance(rows)
-      if (current_cash_book_balance < 0)
-        session[:cash_balance] = current_cash_book_balance
-        session[:voucher_id] = params[:voucher_id]
-        redirect_to("/insufficient_balance") and return
+
+      if params[:confirm_update].blank? #only do this when this variable is blank?
+        if (current_cash_book_balance < 0)
+          session[:cash_balance] = current_cash_book_balance
+          session[:voucher_id] = params[:voucher_id]
+          redirect_to("/insufficient_balance") and return
+        end 
       end
-      #raise rows.last.inspect
+
       create_cash_book(new_cashbook_path, rows, @payment_voucher)
       #check_for_cheque number duplicates
       rows = cash_book_rows(new_cashbook_path)
