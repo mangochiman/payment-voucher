@@ -1,6 +1,5 @@
 require 'spreadsheet'
 require 'writeexcel'
-require 'fileutils'
 class PagesController < ApplicationController
   skip_before_filter :authenticate_user, :only => [:login, :authenticate, :reset_password, :voucher_downloadable, :print_voucher]
   before_filter :lock_screen_when_activated, :except => [:lock_screen, :unlock_screen, :login, :logout, :reset_password]
@@ -375,24 +374,18 @@ class PagesController < ApplicationController
       create_cash_book(new_cashbook_path, rows, @payment_voucher)
       #check_for_cheque number duplicates
       rows = cash_book_rows(new_cashbook_path)
-      data = {}
-      sort_value = 0
-      rows.each do |row|
+      cheque_numbers = []
+      uniq_rows = []
+      i = 0
+      rows.reverse.each do |row|
         cheque_number = row[1]
-        cheque_number = 0 if cheque_number.blank?
-        data[cheque_number] = {}
-        data[cheque_number]["row"] = row
-        data[cheque_number]["sort_value"] = sort_value
-        sort_value = sort_value + 1
+        cheque_number = i if cheque_number.blank?
+        next if cheque_numbers.include?(cheque_number)
+        uniq_rows << row
+        cheque_numbers << cheque_number
+        i = i + 1
       end
-
-      #raise data.inspect
-      sorted_data = data.sort_by{|k, v|v["sort_value"]}
-      rows = []
-      sorted_data.each do |key, values|
-        rows << values["row"]
-      end
-      
+      rows = uniq_rows.reverse
       create_cash_book(new_cashbook_path, rows, @payment_voucher, false) #remove duplicates
       
       `cp #{new_cashbook_path} #{file_path}`
@@ -411,13 +404,20 @@ class PagesController < ApplicationController
       cell_2 = cash_book_sheet.rows[i][2]
       cell_3 = cash_book_sheet.rows[i][3]
       cell_4 = cash_book_sheet.rows[i][4]
-      if cash_book_sheet.rows[i][5].class.name.match(/Spreadsheet::Formula/i)
-        cell_5 = (cash_book_sheet.rows[i][5]).value
-      else
+      if (i == 0)
         cell_5 = cash_book_sheet.rows[i][5]
+      end
+
+      if (i ==1)
+        cell_5 = cash_book_sheet.rows[i][5]
+      end
+
+      if (i > i)
+        cell_5 = ""
       end
       rows << [cell_0, cell_1, cell_2, cell_3, cell_4, cell_5]
     end
+    
     return rows
   end
   
@@ -454,37 +454,39 @@ class PagesController < ApplicationController
     number_red_format_condition.set_num_format('#,##0.00;[RED]-#,##0.00')
 
     row_pos = 0
+
     rows.each do |row|
-      cell_0 = row[0]
-      cell_1 = row[1]
-      cell_2 = row[2]
-      cell_3 = row[3]
-      cell_4 = row[4]
-      cell_5 = row[5]
-      if (row_pos == 0)
+      cell_0 = row[0]; cell_1 = row[1]; cell_2 = row[2]; cell_3 = row[3];
+      cell_4 = row[4]; cell_5 = row[5]
+      
+      if (row_pos == 0) #first row. Header
         worksheet.write(row_pos, 0, cell_0, bold_format)
         worksheet.write(row_pos, 1, cell_1, bold_format)
         worksheet.write(row_pos, 2, cell_2, bold_format)
         worksheet.write(row_pos, 3, cell_3, bold_format)
         worksheet.write(row_pos, 4, cell_4, bold_format)
         worksheet.write(row_pos, 5, cell_5, bold_format)
-      else
+      end
+
+      if (row_pos == 1) #second row. Opening Balance
+        worksheet.write(row_pos, 0, cell_0)
+        worksheet.write(row_pos, 1, cell_1)
+        worksheet.write(row_pos, 2, cell_2)
+        worksheet.write(row_pos, 3, cell_3)
+        worksheet.write(row_pos, 4, cell_4)
+        worksheet.write(row_pos, 5, cell_5, number_format)
+      end
+
+      if (row_pos > 1) #Transactions
+        formulae = "=F#{row_pos}+E#{row_pos + 1}"
         worksheet.write(row_pos, 0, cell_0)
         worksheet.write(row_pos, 1, cell_1)
         worksheet.write(row_pos, 2, cell_2)
         worksheet.write(row_pos, 3, cell_3)
         worksheet.write(row_pos, 4, cell_4, number_red_format)
-        if (row_pos == 1)
-          worksheet.write(row_pos, 5, cell_5, number_format)
-        else
-          formulae = "=F#{row_pos}+E#{row_pos + 1}"
-          if cell_4.blank?
-            worksheet.write(row_pos, 5, cell_5)
-          else
-            worksheet.write_formula(row_pos, 5,  formulae, number_red_format_condition)
-          end
-        end
+        worksheet.write_formula(row_pos, 5,  formulae, number_red_format_condition)
       end
+
       row_pos = row_pos + 1
     end
 
