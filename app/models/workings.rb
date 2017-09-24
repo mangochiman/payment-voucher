@@ -25,9 +25,11 @@ class Workings < ActiveRecord::Base
      return workings
   end
 
-  def self.void_workings(workings_id)
-    workings = Workings.find(workings_id)
+  def self.void_workings(params)
+    workings = Workings.find(params[:workings_id])
     workings.voided = 1
+    workings.voided_by = params[:voided_by]
+    workings.date_voided = Date.today
     return workings
   end
 

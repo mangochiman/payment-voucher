@@ -139,11 +139,11 @@ class PagesController < ApplicationController
       :order => "payment_voucher_id DESC")
     
     if request.post?
-      void_voucher = PaymentVoucher.void_voucher(params[:voucher_id])
+      void_voucher = PaymentVoucher.void_voucher(params)
       if void_voucher.save
         flash[:notice] = "Voucher #: #{void_voucher.voucher_number} has been voided"
       else
-        flash[:error] = "Failed to void the selected voucher"
+        flash[:error] = void_voucher.errors.full_messages.join('<br />')
       end
       redirect_to("/void_voucher_menu")
     end
@@ -226,11 +226,11 @@ class PagesController < ApplicationController
     
     if request.post?
       user = User.find(params[:user_id])
-      user.void_user
+      user.void_user(params)
       if user.save
         flash[:notice] = "#{user.username} has been voided"
       else
-        flash[:error] = "Failed to void the selected user"
+        flash[:error] = user.errors.full_messages.join('<br />')
       end
       redirect_to("/remove_user") and return 
     end
@@ -299,11 +299,11 @@ class PagesController < ApplicationController
     @workings = Workings.paginate(:page => params[:page], :per_page => per_page)
 
     if request.post?
-      void_workings = Workings.void_workings(params[:workings_id])
+      void_workings = Workings.void_workings(params)
       if void_workings.save
         flash[:notice] = "Workings : #{void_workings.name} has been voided"
       else
-        flash[:error] = "Failed to void the selected voucher"
+        flash[:error] = void_workings.errors.full_messages.join('<br />')
       end
       
       redirect_to("/void_workings")

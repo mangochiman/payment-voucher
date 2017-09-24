@@ -79,9 +79,11 @@ class User < ActiveRecord::Base
     return user
   end
 
-  def void_user
+  def void_user(params)
     user = self
     user.voided = 1
+    user.voided_by = params[:voided_by]
+    user.date_voided = Date.today
     return user
   end
 

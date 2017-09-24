@@ -60,6 +60,7 @@
 
 <script type="text/javascript">
   var selectedVoucherID;
+  var userID = '<%= session[:user].user_id %>';
 
   function voidVoucherConfirm(voucherID){
     selectedVoucherID = voucherID;
@@ -79,6 +80,12 @@
     input.value = selectedVoucherID;
     input.name = "voucher_id";
     form.appendChild(input);
+
+    userinput = document.createElement("input");
+    userinput.type = "hidden";
+    userinput.value = userID;
+    userinput.name = "voided_by";
+    form.appendChild(userinput);
 
     form.submit();
 

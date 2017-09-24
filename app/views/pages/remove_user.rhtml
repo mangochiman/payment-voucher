@@ -61,6 +61,7 @@
 
 <script type="text/javascript">
   var selectedUserID;
+  var userID = '<%= session[:user].user_id %>';
 
   function voidUserConfirm(userID){
     selectedUserID = userID;
@@ -81,6 +82,12 @@
     input.name = "user_id";
     form.appendChild(input);
 
+    userinput = document.createElement("input");
+    userinput.type = "hidden";
+    userinput.value = userID;
+    userinput.name = "voided_by";
+    form.appendChild(userinput);
+    
     form.submit();
 
   }

@@ -56,9 +56,11 @@ class PaymentVoucher < ActiveRecord::Base
     
   end
 
-  def self.void_voucher(voucher_id)
-    payment_voucher = PaymentVoucher.find(voucher_id)
+  def self.void_voucher(params)
+    payment_voucher = PaymentVoucher.find(params[:voucher_id])
     payment_voucher.voided = 1
+    payment_voucher.voided_by = params[:voided_by]
+    payment_voucher.date_voided = Date.today
     return payment_voucher
   end
 
