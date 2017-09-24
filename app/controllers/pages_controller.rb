@@ -265,7 +265,8 @@ class PagesController < ApplicationController
 
   def edit_workings
     @page_header = "Edit Workings"
-    @workings = Workings.find(:all)
+    per_page = Workings.per_page
+    @workings = Workings.paginate(:page => params[:page], :per_page => per_page)
   end
 
   def edit_this_workings
@@ -288,12 +289,14 @@ class PagesController < ApplicationController
 
   def view_workings
     @page_header = "View Workings"
-    @workings = Workings.find(:all)
+    per_page = Workings.per_page
+    @workings = Workings.paginate(:page => params[:page], :per_page => per_page)
   end
 
   def void_workings
     @page_header = "Void Workings"
-    @workings = Workings.find(:all)
+    per_page = Workings.per_page
+    @workings = Workings.paginate(:page => params[:page], :per_page => per_page)
 
     if request.post?
       void_workings = Workings.void_workings(params[:workings_id])

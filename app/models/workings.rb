@@ -31,4 +31,9 @@ class Workings < ActiveRecord::Base
     return workings
   end
 
+  def self.per_page
+    per_page = 10
+    return per_page
+  end
+  
 end
