@@ -127,35 +127,35 @@
       <li><a href="#" data-target=".dashboard-menu" class="nav-header" data-toggle="collapse"><i class="fa fa-fw fa-paperclip"></i> Vouchers<i class="fa fa-collapse"></i></a></li>
       <li>
         <ul class="dashboard-menu nav nav-list collapse">
-          <li><a href="/new_voucher_menu"><span class="fa fa-caret-right"></span> New Voucher</a></li>
-          <li ><a href="/edit_voucher_menu"><span class="fa fa-caret-right"></span> Edit Voucher</a></li>
-          <li ><a href="/view_voucher_menu"><span class="fa fa-caret-right"></span> View Voucher</a></li>
-          <li ><a href="/void_voucher_menu"><span class="fa fa-caret-right"></span> Void Voucher</a></li>
+          <li class="new_voucher_menu"><a href="/new_voucher_menu"><span class="fa fa-caret-right"></span> New Voucher</a></li>
+          <li class="edit_voucher_menu"><a href="/edit_voucher_menu"><span class="fa fa-caret-right"></span> Edit Voucher</a></li>
+          <li class="view_voucher_menu"><a href="/view_voucher_menu"><span class="fa fa-caret-right"></span> View Voucher</a></li>
+          <li class="void_voucher_menu"><a href="/void_voucher_menu"><span class="fa fa-caret-right"></span> Void Voucher</a></li>
         </ul>
       </li>
 
       <li><a href="#" data-target=".accounts-menu" class="nav-header collapsed" data-toggle="collapse"><i class="fa fa-fw fa-user"></i> User Accounts <span class="label label-info">+<%= available_users.count %></span></a></li>
       <li>
         <ul class="accounts-menu nav nav-list collapse">
-          <li ><a href="/new_user"><span class="fa fa-caret-right"></span> New User</a></li>
-          <li ><a href="/view_users"><span class="fa fa-caret-right"></span> View Users</a></li>
-          <li ><a href="/remove_user"><span class="fa fa-caret-right"></span> Remove User</a></li>
+          <li class="new_user"><a href="/new_user"><span class="fa fa-caret-right"></span> New User</a></li>
+          <li class="view_users"><a href="/view_users"><span class="fa fa-caret-right"></span> View Users</a></li>
+          <li class="remove_user"><a href="/remove_user"><span class="fa fa-caret-right"></span> Remove User</a></li>
         </ul>
       </li>
 
       <li><a href="#" data-target=".workings-menu" class="nav-header collapsed" data-toggle="collapse"><i class="fa fa-fw fa-adjust"></i> Workings</a></li>
       <li>
         <ul class="workings-menu nav nav-list collapse">
-          <li ><a href="/new_workings"><span class="fa fa-caret-right"></span> New item</a></li>
-          <li ><a href="/edit_workings"><span class="fa fa-caret-right"></span> Edit items</a></li>
-          <li ><a href="/view_workings"><span class="fa fa-caret-right"></span> View items</a></li>
-          <li ><a href="/void_workings"><span class="fa fa-caret-right"></span> Void items</a></li>
+          <li class="new_workings"><a href="/new_workings"><span class="fa fa-caret-right"></span> New item</a></li>
+          <li class="edit_workings"><a href="/edit_workings"><span class="fa fa-caret-right"></span> Edit items</a></li>
+          <li class="view_workings"><a href="/view_workings"><span class="fa fa-caret-right"></span> View items</a></li>
+          <li class="void_workings"><a href="/void_workings"><span class="fa fa-caret-right"></span> Void items</a></li>
         </ul>
       </li>
       <li><a href="/search_vouchers_menu" class="nav-header"><i class="fa fa-fw fa-search"></i> Search vouchers</a></li>
-      <li><a href="/download_cash_book" class="nav-header"><i class="fa fa-fw fa-download"></i> Download Cash Book</a></li>
       <li><a href="/upload_cash_book" class="nav-header"><i class="fa fa-fw fa-upload"></i> Upload Cash Book</a></li>
-
+      <li><a href="/download_cash_book" class="nav-header"><i class="fa fa-fw fa-download"></i> Download Cash Book</a></li>
+      
       <!--<li><a href="#" data-target=".report-menu" class="nav-header collapsed" data-toggle="collapse"><i class="fa fa-fw fa-bank"></i> Reports</a></li>
       <li>
         <ul class="report-menu nav nav-list collapse">
