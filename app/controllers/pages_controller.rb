@@ -388,6 +388,10 @@ class PagesController < ApplicationController
 
     if request.post?
       file_path = "#{Rails.root}/doc/cash_book.xls"
+      unless (File.file?(file_path))
+        flash[:error]= "Cash book not found on the server. Upload the file first and try again"
+        redirect_to("/update_cash_book_menu?voucher_id=#{params[:voucher_id]}") and return
+      end
       new_cashbook_path = "#{Rails.root}/doc/cash_book2.xls"
       rows = cash_book_rows(file_path)
       current_cash_book_balance = PaymentVoucher.current_cash_book_balance(rows)
