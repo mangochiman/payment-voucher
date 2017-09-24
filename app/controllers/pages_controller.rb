@@ -577,7 +577,17 @@ class PagesController < ApplicationController
 
     if request.post?
       uploaded_io = params["input-file"]
+      if uploaded_io.blank?
+        flash[:error] = "Select file first"
+        redirect_to("/upload_cash_book") and return
+      end
+
       file_extension =  File.extname(uploaded_io.original_filename)
+      if (file_extension != '.xls')
+        flash[:error] = "Unsupported file format. Upload an excel file with .xls extension"
+        redirect_to("/upload_cash_book") and return
+      end
+      
       new_name = "cash_book"
       new_file_name = new_name.to_s + file_extension.to_s
       File.open(Rails.root.join('doc' , new_file_name), 'wb') do |file|
