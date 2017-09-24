@@ -134,15 +134,17 @@
         </ul>
       </li>
 
-      <li><a href="#" data-target=".accounts-menu" class="nav-header collapsed" data-toggle="collapse"><i class="fa fa-fw fa-user"></i> User Accounts <span class="label label-info">+<%= available_users.count %></span></a></li>
-      <li>
-        <ul class="accounts-menu nav nav-list collapse">
-          <li class="new_user"><a href="/new_user"><span class="fa fa-caret-right"></span> New User</a></li>
-          <li class="view_users"><a href="/view_users"><span class="fa fa-caret-right"></span> View Users</a></li>
-          <li class="remove_user"><a href="/remove_user"><span class="fa fa-caret-right"></span> Remove User</a></li>
-        </ul>
-      </li>
-
+      <% if (session[:user].role.to_s.match(/admin/i)) %>
+        <li><a href="#" data-target=".accounts-menu" class="nav-header collapsed" data-toggle="collapse"><i class="fa fa-fw fa-user"></i> User Accounts <span class="label label-info">+<%= available_users.count %></span></a></li>
+        <li>
+          <ul class="accounts-menu nav nav-list collapse">
+            <li class="new_user"><a href="/new_user"><span class="fa fa-caret-right"></span> New User</a></li>
+            <li class="view_users"><a href="/view_users"><span class="fa fa-caret-right"></span> View Users</a></li>
+            <li class="remove_user"><a href="/remove_user"><span class="fa fa-caret-right"></span> Remove User</a></li>
+          </ul>
+        </li>
+      <% end %>
+        
       <li><a href="#" data-target=".workings-menu" class="nav-header collapsed" data-toggle="collapse"><i class="fa fa-fw fa-adjust"></i> Workings</a></li>
       <li>
         <ul class="workings-menu nav nav-list collapse">
@@ -155,7 +157,7 @@
       <li><a href="/search_vouchers_menu" class="nav-header"><i class="fa fa-fw fa-search"></i> Search vouchers</a></li>
       <li><a href="/upload_cash_book" class="nav-header"><i class="fa fa-fw fa-upload"></i> Upload Cash Book</a></li>
       <li><a href="/download_cash_book" class="nav-header"><i class="fa fa-fw fa-download"></i> Download Cash Book</a></li>
-      
+
       <!--<li><a href="#" data-target=".report-menu" class="nav-header collapsed" data-toggle="collapse"><i class="fa fa-fw fa-bank"></i> Reports</a></li>
       <li>
         <ul class="report-menu nav nav-list collapse">

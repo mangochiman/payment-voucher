@@ -4,6 +4,10 @@ class PaymentVoucher < ActiveRecord::Base
 
   #validates :voucher_amount, format: { with: /\A\d+\z/, message: "Integer only. No sign allowed." }
   validates_numericality_of :voucher_amount, :only_float => true
+  validates_presence_of :voucher_number
+  validates_uniqueness_of :voucher_number#, :message => ' already taken'
+  validates_uniqueness_of :cheque_number, :allow_nil => true, :allow_blank => true
+
   has_many :workings, :class_name => "PaymentVoucherWorkings",  :foreign_key => :payment_voucher_id
   default_scope :conditions => "#{self.table_name}.voided = 0"
   

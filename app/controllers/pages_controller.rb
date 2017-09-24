@@ -280,7 +280,7 @@ class PagesController < ApplicationController
         flash[:notice] = "New workings was updated"
         redirect_to("/view_workings")
       else
-        flash[:error] = "Failed to update the workings"
+        flash[:error] = edit_workings.errors.full_messages.join('<br />')
         redirect_to("/edit_this_workings?workings_id=#{params[:workings_id]}")
       end
     end
