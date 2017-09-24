@@ -1,5 +1,6 @@
 require 'spreadsheet'
 require 'writeexcel'
+require "will_paginate"
 class PagesController < ApplicationController
   skip_before_filter :authenticate_user, :only => [:login, :authenticate, :reset_password, :voucher_downloadable, :print_voucher]
   before_filter :lock_screen_when_activated, :except => [:lock_screen, :unlock_screen, :login, :logout, :reset_password]
@@ -124,7 +125,10 @@ class PagesController < ApplicationController
   
   def view_voucher_menu
     @page_header = "View payment voucher"
-    @payment_vouchers = PaymentVoucher.find(:all, :order => "payment_voucher_id DESC")
+    per_page = PaymentVoucher.per_page
+    @payment_vouchers = PaymentVoucher.paginate(:page => params[:page], :per_page => per_page,
+      :order => "payment_voucher_id DESC")
+    #@payment_vouchers = PaymentVoucher.find(:all, :order => "payment_voucher_id DESC")
   end
 
   def void_voucher_menu

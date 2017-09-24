@@ -131,5 +131,10 @@ class PaymentVoucher < ActiveRecord::Base
     
     return current_balance
   end
-  
+
+  def self.per_page
+    per_page = 10
+    return per_page
+  end
+
 end

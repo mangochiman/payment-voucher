@@ -213,5 +213,36 @@
     });
   </script>
 
+  <style type="text/css">
+    .pagination a, .pagination .current, .pagination .disabled {
+      position: relative;
+      float: left;
+      padding: 6px 12px;
+      margin-left: -1px;
+      line-height: 1.42857143;
+      color: #428bca;
+      text-decoration: none;
+      background-color: #fff;
+      border: 1px solid #ddd;
+    }
 
-</body></html>
+    .pagination .current {
+      background-color: #eee;
+    }
+
+    .pagination a:hover, .pagination a:focus{
+      color: #2a6496;
+      background-color: #eee;
+      border-color: #ddd;
+    }
+
+    .pagination .disabled {
+      color: #999;
+      cursor: not-allowed;
+      background-color: #fff;
+      border-color: #ddd;
+    }
+  </style>
+
+</body>
+</html>

@@ -33,14 +33,16 @@
   </tbody>
 </table>
 
+<%= will_paginate @payment_vouchers, :previous_label => '&laquo;', :next_label => '&raquo;' %>
 <ul class="pagination">
-  <li><a href="#">&laquo;</a></li>
-  <li><a href="#">1</a></li>
-  <li><a href="#">2</a></li>
-  <li><a href="#">3</a></li>
-  <li><a href="#">4</a></li>
-  <li><a href="#">5</a></li>
-  <li><a href="#">&raquo;</a></li>
+
+  <!--<li><a href="#">&laquo;</a></li>
+  <li><a href="/view_voucher_menu?page=1">1</a></li>
+  <li><a href="/view_voucher_menu?page=2">2</a></li>
+  <li><a href="/view_voucher_menu?page=3">3</a></li>
+  <li><a href="/view_voucher_menu?page=4">4</a></li>
+  <li><a href="/view_voucher_menu?page=5">5</a></li>
+  <li><a href="#">&raquo;</a></li>-->
 </ul>
 
 <script type="text/javascript">
