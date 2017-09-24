@@ -1,3 +1,5 @@
+require "will_paginate"
+
 class PaymentVoucher < ActiveRecord::Base
   set_table_name :payment_vouchers
   set_primary_key :payment_voucher_id
@@ -69,9 +71,11 @@ class PaymentVoucher < ActiveRecord::Base
     return count
   end
 
-  def self.my_vouchers(user)
-    my_vouchers = PaymentVoucher.find(:all, :conditions => ["prepared_by =? ", user.user_id],
-      :order => "payment_voucher_id DESC")
+  def self.my_vouchers(user, params)
+    per_page = PaymentVoucher.per_page
+    my_vouchers = PaymentVoucher.paginate(:conditions => ["prepared_by =? ",
+        user.user_id], :page => params[:page], :per_page => per_page,
+          :order => "payment_voucher_id DESC")
     return my_vouchers
   end
 
@@ -102,6 +106,13 @@ class PaymentVoucher < ActiveRecord::Base
   def self.vouchers_by_date_range(start_date, end_date)
     payment_vouchers = PaymentVoucher.find(:all, :conditions => ["DATE(created_at) >= ? AND DATE(created_at) <= ?",
         start_date, end_date])
+    return payment_vouchers
+  end
+
+  def self.vouchers_by_user(user, start_day_date, end_day_date)
+    payment_vouchers = PaymentVoucher.find(:all, :conditions => ["prepared_by =? AND
+      DATE(created_at) >= ? AND DATE(created_at) <= ?", 
+        user.user_id, start_day_date, end_day_date], :order => "payment_voucher_id DESC",:limit => 10)
     return payment_vouchers
   end
 

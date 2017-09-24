@@ -124,7 +124,7 @@
 
   <div class="sidebar-nav">
     <ul>
-      <li><a href="#" data-target=".dashboard-menu" class="nav-header" data-toggle="collapse"><i class="fa fa-fw fa-paperclip"></i> Vouchers<i class="fa fa-collapse"></i></a></li>
+      <li><a href="#" data-target=".dashboard-menu" class="nav-header vouchers collapsed" data-toggle="collapse"><i class="fa fa-fw fa-paperclip"></i> Vouchers<i class="fa fa-collapse"></i></a></li>
       <li>
         <ul class="dashboard-menu nav nav-list collapse">
           <li class="new_voucher_menu"><a href="/new_voucher_menu"><span class="fa fa-caret-right"></span> New Voucher</a></li>
@@ -135,7 +135,7 @@
       </li>
 
       <% if (session[:user].role.to_s.match(/admin/i)) %>
-        <li><a href="#" data-target=".accounts-menu" class="nav-header collapsed" data-toggle="collapse"><i class="fa fa-fw fa-user"></i> User Accounts <span class="label label-info">+<%= available_users.count %></span></a></li>
+        <li><a href="#" data-target=".accounts-menu" class="nav-header user-accounts collapsed" data-toggle="collapse"><i class="fa fa-fw fa-user"></i> User Accounts <span class="label label-info">+<%= available_users.count %></span></a></li>
         <li>
           <ul class="accounts-menu nav nav-list collapse">
             <li class="new_user"><a href="/new_user"><span class="fa fa-caret-right"></span> New User</a></li>
@@ -145,7 +145,7 @@
         </li>
       <% end %>
         
-      <li><a href="#" data-target=".workings-menu" class="nav-header collapsed" data-toggle="collapse"><i class="fa fa-fw fa-adjust"></i> Workings</a></li>
+      <li><a href="#" data-target=".workings-menu" class="nav-header workings collapsed" data-toggle="collapse"><i class="fa fa-fw fa-adjust"></i> Workings<i class="fa fa-collapse"></i></a></li>
       <li>
         <ul class="workings-menu nav nav-list collapse">
           <li class="new_workings"><a href="/new_workings"><span class="fa fa-caret-right"></span> New item</a></li>
@@ -197,7 +197,7 @@
         <hr />
 
         <!-- Purchase a site license to remove this link from the footer: http://www.portnine.com/bootstrap-themes -->
-        <p>© 2017 <a href="#" target="_blank">WebTech++</a></p>
+        <p>© 2017 <a href="http://www.webtechmw.com" target="_blank">WebTech++</a></p>
       </footer>
     </div>
   </div>

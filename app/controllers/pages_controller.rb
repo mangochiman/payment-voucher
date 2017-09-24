@@ -32,18 +32,20 @@ class PagesController < ApplicationController
     start_day_date = Date.today
     end_day_date = Date.today
 
+    day_name = start_day_date.strftime("%A")
     start_week_date = Date.today.beginning_of_week - 1.day #sunday
+    if day_name.match(/Sunday/i)
+      start_week_date = Date.today
+    end
     end_week_date = start_week_date + 6.days #saturday
-
     start_month_date = Date.today.beginning_of_month
     end_month_date = Date.today.end_of_month
 
     start_year_date = Date.today.beginning_of_year
     end_year_date = Date.today.end_of_year
 
-    todays_vouchers = PaymentVoucher.vouchers_by_date_range(start_day_date, end_day_date)
-    @payment_vouchers = todays_vouchers
-    @todays_vouchers = todays_vouchers.count
+    @payment_vouchers = PaymentVoucher.vouchers_by_user(session[:user], start_day_date, end_day_date)
+    @todays_vouchers = PaymentVoucher.vouchers_by_date_range(start_day_date, end_day_date).count
     @this_weeks_vouchers = PaymentVoucher.vouchers_by_date_range(start_week_date, end_week_date).count
     @this_months_vouchers = PaymentVoucher.vouchers_by_date_range(start_month_date, end_month_date).count
     @this_year_vouchers = PaymentVoucher.vouchers_by_date_range(start_year_date, end_year_date).count
@@ -338,7 +340,7 @@ class PagesController < ApplicationController
 
   def my_vouchers
     @page_header = "My vouchers"
-    @my_vouchers = PaymentVoucher.my_vouchers(session[:user])
+    @my_vouchers = PaymentVoucher.my_vouchers(session[:user], params)
   end
 
   def search_vouchers_menu

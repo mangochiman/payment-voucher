@@ -1,4 +1,4 @@
-<p class="main-detail h3 text-warning" style="margin-top: 0px;">Total vouchers: <%= @my_vouchers.count %></p><br />
+<p class="main-detail h3 text-warning" style="margin-top: 0px;">Total vouchers: <%= @my_vouchers.total_entries %></p><br />
 <table class="table">
   <thead>
     <tr>
@@ -28,6 +28,7 @@
   </tbody>
 </table>
 
+<%= will_paginate @my_vouchers, :previous_label => '&laquo;', :next_label => '&raquo;' %>
 <script type="text/javascript">
   window.onload = function(){
     //jQuery('.dashboard-menu').addClass('in');
