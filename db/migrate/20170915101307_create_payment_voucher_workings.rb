@@ -4,6 +4,8 @@ class CreatePaymentVoucherWorkings < ActiveRecord::Migration
       t.integer :payment_voucher_id
       t.integer :workings_id
       t.integer :voided, :default => 0
+      t.integer :voided_by
+      t.date :date_voided
       t.timestamps
     end
   end

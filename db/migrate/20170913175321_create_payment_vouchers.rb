@@ -11,6 +11,8 @@ class CreatePaymentVouchers < ActiveRecord::Migration
       t.string :donor_code
       t.string :prepared_by
       t.integer :voided, :default => 0
+      t.integer :voided_by
+      t.date :date_voided
       t.timestamps
     end
   end

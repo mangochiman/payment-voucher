@@ -9,6 +9,8 @@ class CreateUsers < ActiveRecord::Migration
       t.string :password
       t.string :salt
       t.integer :voided, :default => 0
+      t.integer :voided_by
+      t.date :date_voided
       t.timestamps
     end
   end
