@@ -215,12 +215,15 @@ class PagesController < ApplicationController
   
   def view_users
     @page_header = "View Users"
-    @users = User.all
+    per_page = User.per_page
+    @users = User.paginate(:page => params[:page], :per_page => per_page)
   end
 
   def remove_user
     @page_header = "Remove user"
-    @users = User.all
+    per_page = User.per_page
+    @users = User.paginate(:page => params[:page], :per_page => per_page)
+    
     if request.post?
       user = User.find(params[:user_id])
       user.void_user

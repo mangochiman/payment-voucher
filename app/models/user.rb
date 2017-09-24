@@ -95,9 +95,14 @@ class User < ActiveRecord::Base
 
   def role
     user_role = self.user_roles.last
-    user_role = user_role. role unless user_role.blank?
+    user_role = user_role.role unless user_role.blank?
     return user_role
   end
 
+  def self.per_page
+    per_page = 10
+    return per_page
+  end
+  
 end
 

@@ -23,6 +23,8 @@
   </tbody>
 </table>
 
+<%= will_paginate @users, :previous_label => '&laquo;', :next_label => '&raquo;' %>
+
 <script type="text/javascript">
   window.onload = function(){
     jQuery('.accounts-menu').addClass('in');
