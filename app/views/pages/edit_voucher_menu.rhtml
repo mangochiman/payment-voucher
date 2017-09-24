@@ -33,6 +33,8 @@
   </tbody>
 </table>
 
+<%= will_paginate @payment_vouchers, :previous_label => '&laquo;', :next_label => '&raquo;' %>
+
 <script type="text/javascript">
   window.onload = function(){
     jQuery('.dashboard-menu').addClass('in');

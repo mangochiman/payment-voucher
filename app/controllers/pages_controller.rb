@@ -71,7 +71,9 @@ class PagesController < ApplicationController
 
   def edit_voucher_menu
     @page_header = "Edit payment voucher"
-    @payment_vouchers = PaymentVoucher.find(:all, :order => "payment_voucher_id DESC")
+    per_page = PaymentVoucher.per_page
+    @payment_vouchers = PaymentVoucher.paginate(:page => params[:page], :per_page => per_page,
+      :order => "payment_voucher_id DESC")
   end
 
   def edit_this_voucher
@@ -128,12 +130,14 @@ class PagesController < ApplicationController
     per_page = PaymentVoucher.per_page
     @payment_vouchers = PaymentVoucher.paginate(:page => params[:page], :per_page => per_page,
       :order => "payment_voucher_id DESC")
-    #@payment_vouchers = PaymentVoucher.find(:all, :order => "payment_voucher_id DESC")
   end
 
   def void_voucher_menu
     @page_header = "Void payment voucher"
-    @payment_vouchers = PaymentVoucher.find(:all, :order => "payment_voucher_id DESC")
+    per_page = PaymentVoucher.per_page
+    @payment_vouchers = PaymentVoucher.paginate(:page => params[:page], :per_page => per_page,
+      :order => "payment_voucher_id DESC")
+    
     if request.post?
       void_voucher = PaymentVoucher.void_voucher(params[:voucher_id])
       if void_voucher.save
