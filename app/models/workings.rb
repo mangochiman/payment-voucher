@@ -2,6 +2,11 @@ class Workings < ActiveRecord::Base
   set_table_name :workings
   set_primary_key :workings_id
 
+  has_many :payment_vouchers, :through => :payment_voucher_workings
+  has_many :payment_voucher_workings, :class_name => "PaymentVoucherWorkings", :foreign_key => "workings_id"
+
+  validates_presence_of :name, :message => ' can not be blank'
+  validates_numericality_of :percent, :only_float => true
   default_scope :conditions => "#{self.table_name}.voided = 0"
 
   def self.new_workings(params)

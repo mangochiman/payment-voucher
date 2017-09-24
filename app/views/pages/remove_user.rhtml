@@ -19,9 +19,15 @@
         <td><%= user.email %></td>
         <td><%= user.phone_number %></td>
         <td><%= user.role %></td>
-        <td>
-          <a href="#" onclick="voidUserConfirm('<%= user.user_id %>')" role="button" data-toggle="modal"><i class="fa fa-trash-o"></i></a>
-        </td>
+        <% unless user.user_id == session[:user].user_id %>
+          <td>
+            <a href="#" onclick="voidUserConfirm('<%= user.user_id %>')" role="button" data-toggle="modal"><i class="fa fa-trash-o"></i></a>
+          </td>
+        <% else %>
+          <td>
+            &nbsp;
+          </td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

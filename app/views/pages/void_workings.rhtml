@@ -17,9 +17,15 @@
         <td><%= workings.name  %></td>
         <td><%= workings.percent %></td>
         <td><strong><%= workings.value %></strong></td>
-        <td>
-          <a href="#" onclick="voidWorkingsConfirm('<%= workings.workings_id %>')" role="button" data-toggle="modal"><i class="fa fa-trash-o"></i></a>
-        </td>
+        <% if workings.payment_vouchers.blank? %>
+          <td>
+            <a href="#" onclick="voidWorkingsConfirm('<%= workings.workings_id %>')" role="button" data-toggle="modal"><i class="fa fa-trash-o"></i></a>
+          </td>
+        <% else %>
+          <td>
+            <a href="#" role="button" data-toggle="modal"><i class="fa fa-lock"></i></a>
+          </td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

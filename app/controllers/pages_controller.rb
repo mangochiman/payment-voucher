@@ -246,7 +246,7 @@ class PagesController < ApplicationController
         flash[:notice] = "New workings was saved"
         redirect_to("/view_workings")
       else
-        flash[:error] = "Failed to save the workings"
+        flash[:error] = new_workings.errors.full_messages.join('<br />')
         redirect_to("/new_workings")
       end
     end
