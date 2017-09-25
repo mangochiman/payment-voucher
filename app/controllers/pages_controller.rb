@@ -533,7 +533,13 @@ class PagesController < ApplicationController
         worksheet.write(row_pos, 1, cell_1)
         worksheet.write(row_pos, 2, cell_2)
         worksheet.write(row_pos, 3, cell_3)
-        worksheet.write(row_pos, 4, cell_4, number_red_format)
+
+        if cell_4.to_f < 0
+          worksheet.write(row_pos, 4, cell_4, number_red_format) #negative numbers
+        else
+          worksheet.write(row_pos, 4, cell_4, number_format) #positive numbers
+        end
+        
         worksheet.write_formula(row_pos, 5,  formulae, number_red_format_condition)
       end
 
