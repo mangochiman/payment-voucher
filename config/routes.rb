@@ -31,6 +31,10 @@ ActionController::Routing::Routes.draw do |map|
   map.logout  '/logout',  :controller => 'pages', :action => 'logout'
   map.change_password  '/change_password',  :controller => 'pages', :action => 'change_password'
   map.reset_password  '/reset_password',  :controller => 'pages', :action => 'reset_password'
+  map.todays_vouchers  '/todays_vouchers',  :controller => 'pages', :action => 'todays_vouchers'
+  map.this_weeks_vouchers  '/this_weeks_vouchers',  :controller => 'pages', :action => 'this_weeks_vouchers'
+  map.this_months_vouchers  '/this_months_vouchers',  :controller => 'pages', :action => 'this_months_vouchers'
+  map.this_years_vouchers  '/this_years_vouchers',  :controller => 'pages', :action => 'this_years_vouchers'
 
   #map.new_voucher_menu  '/new_voucher_menu',  :controller => 'pages', :action => 'new_voucher_menu'
   # Sample of regular route:

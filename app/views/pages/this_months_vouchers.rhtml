@@ -1,0 +1,37 @@
+<p class="main-detail h3 text-warning" style="margin-top: 0px;">Total entries: <%= @payment_vouchers.total_entries %></p>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Voucher #</th>
+      <th>Cheque #</th>
+      <th>Voucher Date</th>
+      <th>Sub Total</th>
+      <th>Payable Amount</th>
+      <th>Expenditure Details</th>
+      <th>Payee Details</th>
+      <th>Account Name</th>
+      <th>Donor Code</th>
+      <th style="width: 3.5em;"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @payment_vouchers.each do |payment_voucher| %>
+      <tr>
+        <td style="text-align: right;"><%= payment_voucher.voucher_number %></td>
+        <td style="text-align: right;"><%= payment_voucher.cheque_number %></td>
+        <td><%= payment_voucher.voucher_date.to_date.strftime("%d/%b/%Y") rescue payment_voucher.voucher_date  %></td>
+        <td><%= number_to_currency(payment_voucher.voucher_amount, :unit => "MWK ") %></td>
+        <td><%= number_to_currency(payment_voucher.payable_amount, :unit => "MWK ") %></td>
+        <td><%= payment_voucher.expenditure_details %></td>
+        <td><%= payment_voucher.payee %></td>
+        <td><%= payment_voucher.account_name %></td>
+        <td><%= payment_voucher.donor_code %></td>
+        <td>
+          <a href="/view_this_voucher?voucher_id=<%= payment_voucher.payment_voucher_id %>" role="button" data-toggle="modal"><i class="fa fa-eye"></i></a>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= will_paginate @payment_vouchers, :previous_label => '&laquo;', :next_label => '&raquo;' %>

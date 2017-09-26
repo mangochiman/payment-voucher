@@ -5,25 +5,25 @@
     <div class="row">
       <div class="col-md-3 col-sm-6">
         <div class="knob-container">
-          <input class="knob" data-width="200" data-min="0" data-max="50" data-displayPrevious="true" value="<%= @todays_vouchers %>" data-fgColor="#92A3C2" data-readOnly=true;/>
+          <input onclick="viewTodaysVouchers();"class="knob" data-width="200" data-min="0" data-max="50" data-displayPrevious="true" value="<%= @todays_vouchers %>" data-fgColor="#92A3C2" data-readOnly=true;/>
           <h3 class="text-muted text-center">Today&apos;s vouchers</h3>
         </div>
       </div>
       <div class="col-md-3 col-sm-6">
         <div class="knob-container">
-          <input class="knob" data-width="200" data-min="0" data-max="250" data-displayPrevious="true" value="<%= @this_weeks_vouchers %>" data-fgColor="#92A3C2" data-readOnly=true;/>
+          <input class="knob" onclick="viewThisWeeksVouchers();" data-width="200" data-min="0" data-max="250" data-displayPrevious="true" value="<%= @this_weeks_vouchers %>" data-fgColor="#92A3C2" data-readOnly=true;/>
           <h3 class="text-muted text-center">This week&apos;s vouchers</h3>
         </div>
       </div>
       <div class="col-md-3 col-sm-6">
         <div class="knob-container">
-          <input class="knob" data-width="200" data-min="0" data-max="1000" data-displayPrevious="true" value="<%= @this_months_vouchers %>" data-fgColor="#92A3C2" data-readOnly=true;/>
+          <input class="knob" onclick="viewThisMonthsVouchers();" data-width="200" data-min="0" data-max="1000" data-displayPrevious="true" value="<%= @this_months_vouchers %>" data-fgColor="#92A3C2" data-readOnly=true;/>
           <h3 class="text-muted text-center">This month&apos;s vouchers</h3>
         </div>
       </div>
       <div class="col-md-3 col-sm-6">
         <div class="knob-container">
-          <input class="knob" data-width="200" data-min="0" data-max="12000" data-displayPrevious="true" value="<%= @this_year_vouchers %>" data-fgColor="#92A3C2" data-readOnly=true;/>
+          <input class="knob" onclick="viewThisYearsVouchers();" data-width="200" data-min="0" data-max="12000" data-displayPrevious="true" value="<%= @this_year_vouchers %>" data-fgColor="#92A3C2" data-readOnly=true;/>
           <h3 class="text-muted text-center">This years&apos;s vouchers</h3>
         </div>
       </div>
@@ -70,3 +70,29 @@
     </div>
   </div>
 </div>
+
+<style type="text/css">
+  .knob{
+    cursor: pointer;
+
+}
+</style>
+
+<script type="text/javascript">
+
+  function viewTodaysVouchers(){
+    window.location = "/todays_vouchers";
+  }
+
+  function viewThisWeeksVouchers(){
+    window.location = "/this_weeks_vouchers";
+  }
+
+  function viewThisMonthsVouchers(){
+    window.location = "/this_months_vouchers";
+  }
+
+  function viewThisYearsVouchers(){
+    window.location = "/this_years_vouchers";
+  }
+</script>

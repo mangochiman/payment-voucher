@@ -45,10 +45,43 @@ class PagesController < ApplicationController
     end_year_date = Date.today.end_of_year
 
     @payment_vouchers = PaymentVoucher.vouchers_by_user(session[:user], start_day_date, end_day_date)
-    @todays_vouchers = PaymentVoucher.vouchers_by_date_range(start_day_date, end_day_date).count
-    @this_weeks_vouchers = PaymentVoucher.vouchers_by_date_range(start_week_date, end_week_date).count
-    @this_months_vouchers = PaymentVoucher.vouchers_by_date_range(start_month_date, end_month_date).count
-    @this_year_vouchers = PaymentVoucher.vouchers_by_date_range(start_year_date, end_year_date).count
+    @todays_vouchers = PaymentVoucher.vouchers_by_date_range(start_day_date, end_day_date, params).total_entries
+    @this_weeks_vouchers = PaymentVoucher.vouchers_by_date_range(start_week_date, end_week_date, params).total_entries
+    @this_months_vouchers = PaymentVoucher.vouchers_by_date_range(start_month_date, end_month_date, params).total_entries
+    @this_year_vouchers = PaymentVoucher.vouchers_by_date_range(start_year_date, end_year_date, params).total_entries
+  end
+
+  def todays_vouchers
+    start_day_date = Date.today
+    end_day_date = Date.today
+    @page_header = "Today's vouchers (#{start_day_date.strftime('%a, %d-%b-%Y')})"
+    @payment_vouchers = PaymentVoucher.vouchers_by_date_range(start_day_date, end_day_date, params)
+  end
+
+  def this_weeks_vouchers
+    start_day_date = Date.today
+    day_name = start_day_date.strftime("%A")
+    start_week_date = Date.today.beginning_of_week - 1.day #sunday
+    if day_name.match(/Sunday/i)
+      start_week_date = Date.today
+    end
+    end_week_date = start_week_date + 6.days #saturday
+    @page_header = "This week's vouchers (#{start_week_date.strftime('%a, %d-%b-%Y')} - #{end_week_date.strftime('%a, %d-%b-%Y')})"
+    @payment_vouchers = PaymentVoucher.vouchers_by_date_range(start_week_date, end_week_date, params)
+  end
+
+  def this_months_vouchers
+    start_month_date = Date.today.beginning_of_month
+    end_month_date = Date.today.end_of_month
+    @page_header = "This month's vouchers (#{start_month_date.strftime('%a, %d-%b-%Y')} - #{end_month_date.strftime('%a, %d-%b-%Y')})"
+    @payment_vouchers = PaymentVoucher.vouchers_by_date_range(start_month_date, end_month_date, params)
+  end
+
+  def this_years_vouchers
+    start_year_date = Date.today.beginning_of_year
+    end_year_date = Date.today.end_of_year
+    @page_header = "This years's vouchers (#{start_year_date.strftime('%a, %d-%b-%Y')} - #{end_year_date.strftime('%a, %d-%b-%Y')})"
+    @payment_vouchers = PaymentVoucher.vouchers_by_date_range(start_year_date, end_year_date, params)
   end
 
   def new_voucher_menu

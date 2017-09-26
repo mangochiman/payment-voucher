@@ -103,9 +103,11 @@ class PaymentVoucher < ActiveRecord::Base
     return payment_voucher
   end
 
-  def self.vouchers_by_date_range(start_date, end_date)
-    payment_vouchers = PaymentVoucher.find(:all, :conditions => ["DATE(created_at) >= ? AND DATE(created_at) <= ?",
-        start_date, end_date])
+  def self.vouchers_by_date_range(start_date, end_date, params)
+    per_page = PaymentVoucher.per_page
+    payment_vouchers = PaymentVoucher.paginate(:conditions => ["DATE(created_at) >= ? AND DATE(created_at) <= ?",
+        start_date, end_date], :page => params[:page], :per_page => per_page,
+          :order => "payment_voucher_id DESC")
     return payment_vouchers
   end
 
