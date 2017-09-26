@@ -282,6 +282,12 @@
     input.name = "voucher_id";
     form.appendChild(input);
 
+    userinput = document.createElement("input");
+    userinput.type = "hidden";
+    userinput.value = user_id;
+    userinput.name = "voided_by";
+    form.appendChild(userinput);
+    
     form.submit();
 
   }
