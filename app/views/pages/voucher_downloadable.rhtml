@@ -65,22 +65,35 @@
               <img src="/images/baobab.png" class="baobab-logo"></img>
               <h2 style="color: black;">PAYMENT VOUCHER</h2>
             </center>
-            <div style="padding-right: 100px;">
-              <strong>Cheque #: <%= @payment_voucher.cheque_number %></strong>
-              <strong class="pull-right">Voucher #: <%= @payment_voucher.voucher_number %></strong>
-            </div><br />
-
-            <div style="padding-right: 100px;">
-              <strong class="pull-right">Date: <%= @payment_voucher.voucher_date.to_date.strftime("%d/%b/%Y") rescue @payment_voucher.voucher_date %></strong>
-            </div><br /><br />
-
-            <div style="padding-right: 100px;">
-              <strong class="pull-right">Amount:</strong>
-            </div><br />
-
-            <div>
-              <strong class="pull-left">Payee Details: <%= @payment_voucher.payee %></strong>
-            </div> <br /><br />
+            <table style="width: 100%; border: none !important">
+              <tbody>
+                <tr style="border: none !important">
+                  <td style="width: 100px; border: none !important">Cheque # </td>
+                  <td style="text-align: center;"> <%= @payment_voucher.cheque_number %></td>
+                  <td style="text-align: right; border: none !important">Voucher # &nbsp;</td>
+                  <td style="text-align: center; width: 150px;"><%= @payment_voucher.voucher_number %></td>
+                </tr>
+                <tr style="border: none !important">
+                  <td style="border: none !important">&nbsp;</td>
+                  <td style="border: none !important">&nbsp;</td>
+                  <td style="text-align: right; border: none !important">Date &nbsp;</td>
+                  <td style="text-align: center;"><%= @payment_voucher.voucher_date.to_date.strftime("%d/%b/%Y") rescue @payment_voucher.voucher_date %></td>
+                </tr>
+                <tr style="border: none !important">
+                  <td style="border: none !important">&nbsp;</td>
+                  <td style="border: none !important">&nbsp;</td>
+                  <td style="text-align: right; border: none !important">Amount &nbsp;</td>
+                  <td style="text-align: center;">&nbsp;</td>
+                </tr>
+                <tr style="border: none !important">
+                  <td style="border: none !important">Payee Details </td>
+                  <td style="text-align: center; border: none;"><%= @payment_voucher.payee %></td>
+                  <td style="border: none !important">&nbsp;</td>
+                  <td style="border: none !important">&nbsp;</td>
+                </tr>
+              </tbody>
+            </table>
+            <br />
           </div>
 
         </div>

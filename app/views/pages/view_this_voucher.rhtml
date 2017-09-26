@@ -22,22 +22,35 @@
       <img src="/images/baobab.png" class="baobab-logo"></img>
       <h2 style="color: black;">PAYMENT VOUCHER</h2>
     </center>
-    <div style="padding-right: 100px;">
-      <strong>Cheque #: <%= @payment_voucher.cheque_number %></strong>
-      <strong class="pull-right">Voucher #: <%= @payment_voucher.voucher_number %></strong>
-    </div><br />
-
-    <div style="padding-right: 100px;">
-      <strong class="pull-right">Date: <%= @payment_voucher.voucher_date.to_date.strftime("%d/%b/%Y") rescue @payment_voucher.voucher_date %></strong>
-    </div><br /><br />
-
-    <div style="padding-right: 100px;">
-      <strong class="pull-right">Amount:</strong>
-    </div><br />
-
-    <div>
-      <strong class="pull-left">Payee Details: <%= @payment_voucher.payee %></strong>
-    </div> <br /><br />
+    <table style="width: 100%;">
+      <tbody>
+        <tr>
+          <td style="width: 100px;">Cheque # :</td>
+          <th style="text-align: left;"> <%= @payment_voucher.cheque_number %></th>
+          <td style="text-align: right;">Voucher # :</td>
+          <th style="text-align: center; width: 150px;"><%= @payment_voucher.voucher_number %></th>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td style="text-align: right;">Date :</td>
+          <th style="text-align: center;"><%= @payment_voucher.voucher_date.to_date.strftime("%d/%b/%Y") rescue @payment_voucher.voucher_date %></th>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td style="text-align: right;">Amount :</td>
+          <td style="text-align: center;">&nbsp;</td>
+        </tr>
+        <tr>
+          <td>Payee Details :</td>
+          <th><%= @payment_voucher.payee %></th>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+      </tbody>
+    </table>
+    <br />
   </div>
 
 </div>
