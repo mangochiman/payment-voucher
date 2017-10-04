@@ -1,4 +1,31 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th> #</th>
+      <th>Details</th>
+      <th>Amount</th>
+      <th>Date</th>
+      <th style="width: 3.5em;"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% count = 0 %>
+    <% @incomes.each do |income| %>
+      <tr>
+        <% count = count + 1 %>
+        <td><%= count %></td>
+        <td><%= income.details  %></td>
+        <td><%= number_to_currency(income.amount, :unit => "") %></td>
+        <td><%= income.date %></td>
+        <td>
+          <a href="/edit_this_income?income_id=<%= income.income_id %>"><i class="fa fa-pencil"></i></a>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
+<%= will_paginate @incomes, :previous_label => '&laquo;', :next_label => '&raquo;' %>
 
 <script type="text/javascript">
   window.onload = function(){

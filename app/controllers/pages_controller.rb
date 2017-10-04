@@ -243,23 +243,58 @@ class PagesController < ApplicationController
 
   def new_income
     @page_header = "New income"
+    if request.post?
+      new_income = Income.new_income(params)
+      if new_income.save
+        flash[:notice] = "New income was created"
+        redirect_to("/new_income") and return
+      else
+        flash[:error] = new_income.errors.full_messages.join('<br />')
+        redirect_to("/new_income") and return
+      end
+    end
   end
 
   def edit_income
     @page_header = "Edit income"
+    per_page = Workings.per_page
+    @incomes = Income.paginate(:page => params[:page], :per_page => per_page)
   end
 
   def edit_this_income
     @income = Income.find(params[:income_id])
     @page_header = "Editing income:  #{@income.details}"
+    if request.post?
+      edit_income = Income.edit_income(params)
+      if edit_income.save
+        flash[:notice] = "Income was updated"
+        redirect_to("/view_income")
+      else
+        flash[:error] = edit_income.errors.full_messages.join('<br />')
+        redirect_to("/edit_this_income?income_id=#{params[:income_id]}")
+      end
+    end
   end
   
   def view_income
     @page_header = "View income"
+    per_page = Workings.per_page
+    @incomes = Income.paginate(:page => params[:page], :per_page => per_page)
   end
 
   def void_income
     @page_header = "Void income"
+    per_page = Workings.per_page
+    @incomes = Income.paginate(:page => params[:page], :per_page => per_page)
+    if request.post?
+      void_income = Income.void_income(params)
+      if void_income.save
+        flash[:notice] = "Income: #{void_income.details} has been voided"
+      else
+        flash[:error] = void_income.errors.full_messages.join('<br />')
+      end
+      redirect_to("/view_income")
+    end
   end
 
   def new_user

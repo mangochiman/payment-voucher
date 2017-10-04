@@ -1,0 +1,47 @@
+<form action="/edit_this_income" role="form" class="form-horizontal" id="edit-this-income" method="POST">
+
+  <div class="form-group">
+    <label class="control-label col-lg-3" for="amount">Amount</label>
+    <div class="col-lg-7">
+      <input type="text" name="amount" value="<%= @income.amount %>" class="form-control" placeholder="Amount" id="amount" required/>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label col-lg-3" for="date">Date</label>
+    <div class="col-lg-7">
+      <% date = @income.date.to_date.strftime('%m/%d/%Y') rescue @income.date.to_date %>
+      <input type="text" name="date" value="<%= date %>" class="form-control datepicker" placeholder="Date" id="date" required/>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label col-lg-3" for="details">Details</label>
+    <div class="col-lg-7">
+      <input type="text" name="details" value="<%= @income.details %>" class="form-control" placeholder="Details" id="details" required/>
+    </div>
+  </div>
+
+  <input type="hidden" name="user_id" value="<%= session[:user].user_id %>"/>
+
+  <input type="hidden" name="income_id" value="<%= @income.income_id %>"/>
+
+
+  <div class="form-group modal-footer">
+    <label class="control-label col-lg-3" for="">&nbsp;</label>
+    <div class="col-lg-7">
+      <input class="btn btn-primary " type="submit" value="Update income"></input>
+    </div>
+  </div>
+
+
+</form>
+
+
+<script type="text/javascript">
+  window.onload = function(){
+    jQuery('.income-menu').addClass('in');
+    jQuery('.edit_income').addClass('active');
+    jQuery('.income').removeClass('collapsed');
+  }
+</script>

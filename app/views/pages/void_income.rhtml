@@ -1,4 +1,87 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th> #</th>
+      <th>Details</th>
+      <th>Amount</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% count = 0 %>
+    <% @incomes.each do |income| %>
+      <tr>
+        <% count = count + 1 %>
+        <td><%= count %></td>
+        <td><%= income.details  %></td>
+        <td><%= number_to_currency(income.amount, :unit => "") %></td>
+        <td><%= income.date %></td>
+        <td>
+          <a href="#" onclick="voidIncomeConfirm('<%= income.income_id %>')" role="button" data-toggle="modal"><i class="fa fa-trash-o"></i></a>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
+<!-- Modal -->
+<div class="modal fade" id="voidIncomeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Void item</h4>
+      </div>
+      <div class="modal-body">
+        This will void the selected item. Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No, Am Not Sure</button>
+        <button onclick="voidIncome();" type="button" class="btn btn-primary">Yes, Am Sure</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+
+<script type="text/javascript">
+  var selectedIncomeID;
+  var userID = '<%= session[:user].user_id %>';
+
+  function voidIncomeConfirm(incomeID){
+    selectedIncomeID = incomeID;
+    jQuery('#voidIncomeModal').modal('show');
+  }
+
+  function voidIncome(){
+    body = document.getElementsByTagName("body")[0];
+
+    form = document.createElement("form");
+    form.method = "POST"
+    form.action = "/void_income";
+    body.appendChild(form);
+
+    input = document.createElement("input");
+    input.type = "hidden";
+    input.value = selectedIncomeID;
+    input.name = "income_id";
+    form.appendChild(input);
+
+    userinput = document.createElement("input");
+    userinput.type = "hidden";
+    userinput.value = userID;
+    userinput.name = "voided_by";
+    form.appendChild(userinput);
+
+    form.submit();
+
+  }
+
+</script>
 
 <script type="text/javascript">
   window.onload = function(){
