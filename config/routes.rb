@@ -36,6 +36,18 @@ ActionController::Routing::Routes.draw do |map|
   map.this_months_vouchers  '/this_months_vouchers',  :controller => 'pages', :action => 'this_months_vouchers'
   map.this_years_vouchers  '/this_years_vouchers',  :controller => 'pages', :action => 'this_years_vouchers'
 
+  map.new_account_details  '/new_account_details',  :controller => 'pages', :action => 'new_account_details'
+  map.edit_account_details  '/edit_account_details',  :controller => 'pages', :action => 'edit_account_details'
+  map.view_account_details  '/view_account_details',  :controller => 'pages', :action => 'view_account_details'
+  map.void_account_details  '/void_account_details',  :controller => 'pages', :action => 'void_account_details'
+  map.edit_this_account  '/edit_this_account',  :controller => 'pages', :action => 'edit_this_account'
+
+  map.new_income  '/new_income',  :controller => 'pages', :action => 'new_income'
+  map.edit_income  '/edit_income',  :controller => 'pages', :action => 'edit_income'
+  map.view_income  '/view_income',  :controller => 'pages', :action => 'view_income'
+  map.void_income  '/void_income',  :controller => 'pages', :action => 'void_income'
+  map.edit_this_income  '/edit_this_income',  :controller => 'pages', :action => 'edit_this_income'
+
   #map.new_voucher_menu  '/new_voucher_menu',  :controller => 'pages', :action => 'new_voucher_menu'
   # Sample of regular route:
   #   map.connect 'products/:id', :controller => 'catalog', :action => 'view'

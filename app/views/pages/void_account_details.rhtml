@@ -1,0 +1,91 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th> #</th>
+      <th>Name</th>
+      <th>Code</th>
+      <th style="width: 3.5em;"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% count = 0 %>
+    <% @accounts.each do |account| %>
+      <tr>
+        <% count = count + 1 %>
+        <td><%= count %></td>
+        <td><%= account.name  %></td>
+        <td><%= account.code %></td>
+        <td>
+          <a href="#" onclick="voidAccountConfirm('<%= account.account_id %>')" role="button" data-toggle="modal"><i class="fa fa-trash-o"></i></a>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="voidAccountModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Void item</h4>
+      </div>
+      <div class="modal-body">
+        This will void the selected item. Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No, Am Not Sure</button>
+        <button onclick="voidAccount();" type="button" class="btn btn-primary">Yes, Am Sure</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+
+<script type="text/javascript">
+  var selectedAccountID;
+  var userID = '<%= session[:user].user_id %>';
+
+  function voidAccountConfirm(accountID){
+    selectedAccountID = accountID;
+    jQuery('#voidAccountModal').modal('show');
+  }
+
+  function voidAccount(){
+    body = document.getElementsByTagName("body")[0];
+
+    form = document.createElement("form");
+    form.method = "POST"
+    form.action = "/void_account_details";
+    body.appendChild(form);
+
+    input = document.createElement("input");
+    input.type = "hidden";
+    input.value = selectedAccountID;
+    input.name = "account_id";
+    form.appendChild(input);
+
+    userinput = document.createElement("input");
+    userinput.type = "hidden";
+    userinput.value = userID;
+    userinput.name = "voided_by";
+    form.appendChild(userinput);
+
+    form.submit();
+
+  }
+
+</script>
+
+<script type="text/javascript">
+  window.onload = function(){
+    jQuery('.account-details-menu').addClass('in');
+    jQuery('.void_account_details').addClass('active');
+    jQuery('.account-details').removeClass('collapsed');
+  }
+</script>

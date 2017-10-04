@@ -1,0 +1,34 @@
+<form action="/new_account_details" role="form" class="form-horizontal" method="POST">
+
+  <div class="form-group">
+    <label class="control-label col-lg-3" for="item">Name</label>
+    <div class="col-lg-7">
+      <input type="text" name="name" class="form-control" placeholder="Account name" id="item" required/>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label col-lg-3" for="code">Code</label>
+    <div class="col-lg-7">
+      <input type="text" name="code" class="form-control" placeholder="Code" id="code" required/>
+    </div>
+  </div>
+
+  <div class="form-group modal-footer">
+    <label class="control-label col-lg-3" for="">&nbsp;</label>
+    <div class="col-lg-7">
+      <input class="btn btn-primary " type="submit" value="Create Account"></input>
+    </div>
+  </div>
+
+
+</form>
+
+
+<script type="text/javascript">
+  window.onload = function(){
+    jQuery('.account-details-menu').addClass('in');
+    jQuery('.new_account_details').addClass('active');
+    jQuery('.account-details').removeClass('collapsed');
+  }
+</script>

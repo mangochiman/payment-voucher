@@ -1,0 +1,30 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th> #</th>
+      <th>Name</th>
+      <th>Code</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% count = 0 %>
+    <% @accounts.each do |account| %>
+      <tr>
+        <% count = count + 1 %>
+        <td><%= count %></td>
+        <td><%= account.name  %></td>
+        <td><%= account.code %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= will_paginate @accounts, :previous_label => '&laquo;', :next_label => '&raquo;' %>
+
+<script type="text/javascript">
+  window.onload = function(){
+    jQuery('.account-details-menu').addClass('in');
+    jQuery('.view_account_details').addClass('active');
+    jQuery('.account-details').removeClass('collapsed');
+  }
+</script>

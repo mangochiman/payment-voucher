@@ -184,6 +184,84 @@ class PagesController < ApplicationController
     end
   end
 
+  def new_account_details
+    @page_header = "New account details"
+    if request.post?
+      new_account = Account.new_account(params)
+      if new_account.save
+        flash[:notice] = "New account was created"
+        redirect_to("/new_account_details") and return
+      else
+        flash[:error] = new_account.errors.full_messages.join('<br />')
+        redirect_to("/new_account_details") and return
+      end
+    end
+  
+  end
+
+  def edit_account_details
+    @page_header = "Edit account details"
+    per_page = Workings.per_page
+    @accounts = Account.paginate(:page => params[:page], :per_page => per_page)
+  end
+
+  def edit_this_account
+    @account = Account.find(params[:account_id])
+    @page_header = "Editing account name:  #{@account.name}"
+    if request.post?
+      edit_account = Account.edit_account(params)
+      if edit_account.save
+        flash[:notice] = "Account was updated"
+        redirect_to("/edit_account_details") and return
+      else
+        flash[:error] = edit_account.errors.full_messages.join('<br />')
+        redirect_to("/edit_this_account?account_id=#{params[:account_id]}") and return
+      end
+    end
+  end
+  
+  def view_account_details
+    @page_header = "View account details"
+    per_page = Workings.per_page
+    @accounts = Account.paginate(:page => params[:page], :per_page => per_page)
+  end
+
+  def void_account_details
+    @page_header = "Void account details"
+    per_page = Workings.per_page
+    @accounts = Account.paginate(:page => params[:page], :per_page => per_page)
+    if request.post?
+      void_account = Account.void_account(params)
+      if void_account.save
+        flash[:notice] = "Account name: #{void_account.name} has been voided"
+      else
+        flash[:error] = void_account.errors.full_messages.join('<br />')
+      end
+      redirect_to("/view_account_details")
+    end
+  end
+
+  def new_income
+    @page_header = "New income"
+  end
+
+  def edit_income
+    @page_header = "Edit income"
+  end
+
+  def edit_this_income
+    @income = Income.find(params[:income_id])
+    @page_header = "Editing income:  #{@income.details}"
+  end
+  
+  def view_income
+    @page_header = "View income"
+  end
+
+  def void_income
+    @page_header = "Void income"
+  end
+
   def new_user
     @page_header = "New user"
     @roles = User.roles

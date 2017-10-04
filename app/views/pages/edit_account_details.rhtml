@@ -1,0 +1,36 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th> #</th>
+      <th>Name</th>
+      <th>Code</th>
+      <th style="width: 3.5em;"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% count = 0 %>
+    <% @accounts.each do |account| %>
+      <tr>
+        <% count = count + 1 %>
+        <td><%= count %></td>
+        <td><%= account.name  %></td>
+        <td><%= account.code %></td>
+        <td>
+          <a href="/edit_this_account?account_id=<%= account.account_id %>"><i class="fa fa-pencil"></i></a>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= will_paginate @accounts, :previous_label => '&laquo;', :next_label => '&raquo;' %>
+
+
+
+<script type="text/javascript">
+  window.onload = function(){
+    jQuery('.account-details-menu').addClass('in');
+    jQuery('.edit_account_details').addClass('active');
+    jQuery('.account-details').removeClass('collapsed');
+  }
+</script>
