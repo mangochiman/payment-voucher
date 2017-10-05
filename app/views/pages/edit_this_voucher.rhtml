@@ -36,16 +36,18 @@
   </div>
 
   <div class="form-group">
-    <label class="control-label col-lg-3" for="account_name">Account Name</label>
+    <label class="control-label col-lg-3">Account Details</label>
     <div class="col-lg-7">
-      <input type="text" name="account_name"  value="<%= @payment_voucher.account_name %>" class="form-control" placeholder="Account Name" id="account_name" required/>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label class="control-label col-lg-3" for="donor_code">Donor Code</label>
-    <div class="col-lg-7">
-      <input type="text" name="donor_code" value="<%= @payment_voucher.donor_code %>" class="form-control" placeholder="Donor Code" id="username" required/>
+      <select name="account_id" class="form-control" tabindex="8" required>
+        <option value="">Select Account</option>
+        <% @accounts.each do |account| %>
+          <% if account.account_id == @payment_voucher.account_id %>
+            <option value="<%= account.account_id %>" selected="true"><%= account.name %></option>
+          <% else %>
+            <option value="<%= account.account_id %>"><%= account.name %></option>
+          <% end %>
+        <% end %>
+      </select>
     </div>
   </div>
 

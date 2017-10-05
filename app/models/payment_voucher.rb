@@ -10,9 +10,18 @@ class PaymentVoucher < ActiveRecord::Base
   validates_uniqueness_of :voucher_number#, :message => ' already taken'
   validates_uniqueness_of :cheque_number, :allow_nil => true, :allow_blank => true
 
+  belongs_to :account, :foreign_key => :account_id
   has_many :workings, :class_name => "PaymentVoucherWorkings",  :foreign_key => :payment_voucher_id
   default_scope :conditions => "#{self.table_name}.voided = 0"
-  
+
+  def account_name
+    self.account.name rescue nil
+  end
+
+  def donor_code
+    self.account.code rescue nil
+  end
+
   def self.new_payment_voucher(params)
     payment_voucher = PaymentVoucher.new
     payment_voucher.voucher_number = params[:voucher_number]
@@ -20,8 +29,7 @@ class PaymentVoucher < ActiveRecord::Base
     payment_voucher.voucher_amount = params[:voucher_amount]
     payment_voucher.expenditure_details = params[:expenditure_details]
     payment_voucher.payee = params[:payee]
-    payment_voucher.account_name = params[:account_name]
-    payment_voucher.donor_code = params[:donor_code]
+    payment_voucher.account_id = params[:account_id]
     payment_voucher.prepared_by = params[:user_id]
     return payment_voucher
   end
@@ -33,8 +41,7 @@ class PaymentVoucher < ActiveRecord::Base
     payment_voucher.voucher_amount = params[:voucher_amount]
     payment_voucher.expenditure_details = params[:expenditure_details]
     payment_voucher.payee = params[:payee]
-    payment_voucher.account_name = params[:account_name]
-    payment_voucher.donor_code = params[:donor_code]
+    payment_voucher.account_id = params[:account_id]
     return payment_voucher
   end
 

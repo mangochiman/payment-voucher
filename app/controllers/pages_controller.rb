@@ -87,6 +87,7 @@ class PagesController < ApplicationController
   def new_voucher_menu
     @page_header = "New payment voucher"
     @workings = Workings.find(:all)
+    @accounts = Account.find(:all)
     if request.post?
       if params[:workings].blank?
         flash[:error] = "Voucher creation failed. Workings were not selected"
@@ -107,6 +108,7 @@ class PagesController < ApplicationController
   def edit_voucher_menu
     @page_header = "Edit payment voucher"
     per_page = PaymentVoucher.per_page
+    @accounts = Account.find(:all)
     @payment_vouchers = PaymentVoucher.paginate(:page => params[:page], :per_page => per_page,
       :order => "payment_voucher_id DESC")
   end
@@ -116,6 +118,7 @@ class PagesController < ApplicationController
     @page_header = "Editing payment voucher #:  #{@payment_voucher.voucher_number}"
     @workings = Workings.find(:all)
     @my_workings = @payment_voucher.workings
+    @accounts = Account.find(:all)
     
     if request.post?
       if params[:workings].blank?
@@ -165,6 +168,7 @@ class PagesController < ApplicationController
     per_page = PaymentVoucher.per_page
     @payment_vouchers = PaymentVoucher.paginate(:page => params[:page], :per_page => per_page,
       :order => "payment_voucher_id DESC")
+    @accounts = Account.find(:all)
   end
 
   def void_voucher_menu
@@ -172,6 +176,7 @@ class PagesController < ApplicationController
     per_page = PaymentVoucher.per_page
     @payment_vouchers = PaymentVoucher.paginate(:page => params[:page], :per_page => per_page,
       :order => "payment_voucher_id DESC")
+    @accounts = Account.find(:all)
     
     if request.post?
       void_voucher = PaymentVoucher.void_voucher(params)
@@ -294,6 +299,18 @@ class PagesController < ApplicationController
         flash[:error] = void_income.errors.full_messages.join('<br />')
       end
       redirect_to("/view_income")
+    end
+  end
+
+  def update_income_cash_book
+    @page_header = "Update income cash book"
+    per_page = Workings.per_page
+    @incomes = Income.paginate(:page => params[:page], :per_page => per_page)
+    if request.post?
+      if (params[:income_ids].blank?)
+        flash[:error] = "No item was selected. Please select at least one item and continue"
+      end
+      redirect_to("/update_income_cash_book") and return
     end
   end
 

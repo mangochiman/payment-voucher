@@ -7,8 +7,7 @@ class CreatePaymentVouchers < ActiveRecord::Migration
       t.date :voucher_date
       t.string :voucher_amount
       t.text :expenditure_details
-      t.string :account_name
-      t.string :donor_code
+      t.integer :account_id
       t.string :prepared_by
       t.integer :voided, :default => 0
       t.integer :voided_by
