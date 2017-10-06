@@ -1,3 +1,5 @@
+require 'spreadsheet'
+require 'writeexcel'
 require "will_paginate"
 
 class PaymentVoucher < ActiveRecord::Base
@@ -82,7 +84,7 @@ class PaymentVoucher < ActiveRecord::Base
     per_page = PaymentVoucher.per_page
     my_vouchers = PaymentVoucher.paginate(:conditions => ["prepared_by =? ",
         user.user_id], :page => params[:page], :per_page => per_page,
-          :order => "payment_voucher_id DESC")
+      :order => "payment_voucher_id DESC")
     return my_vouchers
   end
 
@@ -110,11 +112,167 @@ class PaymentVoucher < ActiveRecord::Base
     return payment_voucher
   end
 
+  def update_cashbook
+    payment_voucher = self
+    file_path = "#{Rails.root}/doc/cash_book.xls"
+    new_cashbook_path = "#{Rails.root}/doc/cash_book2.xls"
+    rows = PaymentVoucher.cash_book_rows(file_path)
+    #current_cash_book_balance = PaymentVoucher.current_cash_book_balance(rows)
+    PaymentVoucher.create_cash_book(new_cashbook_path, rows, payment_voucher)
+    #check_for_cheque number duplicates
+    rows = PaymentVoucher.cash_book_rows(new_cashbook_path)
+    cheque_numbers = []
+    uniq_rows = []
+    i = 0
+    rows.reverse.each do |row|
+      cheque_number = row[1]
+      cheque_number = i if cheque_number.blank?
+      next if cheque_numbers.include?(cheque_number)
+      uniq_rows << row
+      cheque_numbers << cheque_number
+      i = i + 1
+    end
+    rows = uniq_rows.reverse
+    PaymentVoucher.create_cash_book(new_cashbook_path, rows, payment_voucher, false) #remove duplicates
+    `cp #{new_cashbook_path} #{file_path}`
+  end
+
+  def self.create_cash_book(new_cashbook_path, rows, payment_voucher, new_entry = true)
+    workbook = WriteExcel.new(new_cashbook_path)
+    worksheet  = workbook.add_worksheet
+    worksheet.set_column(0, 0, 15)
+    worksheet.set_column(0, 1, 20)
+    worksheet.set_column(0, 2, 20)
+    worksheet.set_column(0, 3, 20)
+    worksheet.set_column(0, 4, 20)
+    worksheet.set_column(0, 5, 20)
+    # Add and define a format
+    format = workbook.add_format
+    format.set_bold
+    format.set_align('right')
+
+    red_color = workbook.add_format
+    red_color.set_color('red')
+
+    bold_format = workbook.add_format
+    bold_format.set_bold
+    bold_format.set_align('center')
+
+    number_format = workbook.add_format
+    number_format.set_num_format('#,##0.00') # 1,234.56
+
+    number_red_format = workbook.add_format
+    number_red_format.set_color('red')
+    number_red_format.set_num_format('#,##0.00')
+
+    number_red_format_condition  = workbook.add_format
+    number_red_format_condition.set_num_format('#,##0.00')
+    number_red_format_condition.set_num_format('#,##0.00;[RED]-#,##0.00')
+
+    row_pos = 0
+
+    rows.each do |row|
+      cell_0 = row[0]; cell_1 = row[1]; cell_2 = row[2]; cell_3 = row[3];
+      cell_4 = row[4]; cell_5 = row[5]
+      
+      if (row_pos == 0) #first row. Header
+        worksheet.write(row_pos, 0, cell_0, bold_format)
+        worksheet.write(row_pos, 1, cell_1, bold_format)
+        worksheet.write(row_pos, 2, cell_2, bold_format)
+        worksheet.write(row_pos, 3, cell_3, bold_format)
+        worksheet.write(row_pos, 4, cell_4, bold_format)
+        worksheet.write(row_pos, 5, cell_5, bold_format)
+      end
+
+      if (row_pos == 1) #second row. Opening Balance
+        worksheet.write(row_pos, 0, cell_0)
+        worksheet.write(row_pos, 1, cell_1)
+        worksheet.write(row_pos, 2, cell_2)
+        worksheet.write(row_pos, 3, cell_3)
+        worksheet.write(row_pos, 4, cell_4)
+        worksheet.write(row_pos, 5, cell_5, number_format)
+      end
+
+      if (row_pos > 1) #Transactions
+        formulae = "=F#{row_pos}+E#{row_pos + 1}"
+        worksheet.write(row_pos, 0, cell_0)
+        worksheet.write(row_pos, 1, cell_1)
+        worksheet.write(row_pos, 2, cell_2)
+        worksheet.write(row_pos, 3, cell_3)
+
+        if cell_4.to_f < 0
+          worksheet.write(row_pos, 4, cell_4, number_red_format) #negative numbers
+        else
+          worksheet.write(row_pos, 4, cell_4, number_format) #positive numbers
+        end
+        
+        worksheet.write_formula(row_pos, 5,  formulae, number_red_format_condition)
+      end
+
+      row_pos = row_pos + 1
+    end
+
+    if (new_entry)
+      cheque_number = payment_voucher.cheque_number
+      voucher_date = payment_voucher.voucher_date.to_date.strftime("%d.%m.%Y")
+      payable_amount = payment_voucher.payable_amount
+      expenditure_details = payment_voucher.expenditure_details
+      payee_details = payment_voucher.payee
+
+      new_row_pos = row_pos
+      formulae = "=F#{new_row_pos}+E#{new_row_pos + 1}"
+      worksheet.write(new_row_pos, 0, voucher_date)
+      worksheet.write(new_row_pos, 1, cheque_number)
+      worksheet.write(new_row_pos, 2, payee_details)
+      worksheet.write(new_row_pos, 3, expenditure_details)
+      worksheet.write(new_row_pos, 4, -payable_amount.to_i, number_red_format)
+      worksheet.write_formula(new_row_pos, 5,  formulae, number_red_format_condition)
+    end
+
+    # write to file
+    workbook.close
+  end
+
+  def self.cash_book_rows(file_path)
+    cash_book = Spreadsheet.open file_path
+    cash_book_sheet = cash_book.worksheet 0
+    total_rows = cash_book_sheet.count
+    rows = []
+    current_balance = 0
+    0.upto(total_rows - 1) do |i|
+      cell_0 = cash_book_sheet.rows[i][0]
+      cell_1 = cash_book_sheet.rows[i][1]
+      cell_2 = cash_book_sheet.rows[i][2]
+      cell_3 = cash_book_sheet.rows[i][3]
+      cell_4 = cash_book_sheet.rows[i][4]
+      if (i == 0)
+        cell_5 = cash_book_sheet.rows[i][5]
+      end
+
+      if i == 1
+        current_balance =  cell_5.to_f
+      end
+      if (i ==1)
+        cell_5 = cash_book_sheet.rows[i][5]
+      end
+
+      if (i > i)
+        cell_5 = ""
+      end
+      if current_balance > 0
+        current_balance = current_balance.to_f + cell_4.to_f
+      end
+      rows << [cell_0, cell_1, cell_2, cell_3, cell_4, cell_5]
+    end
+
+    return rows
+  end
+
   def self.vouchers_by_date_range(start_date, end_date, params)
     per_page = PaymentVoucher.per_page
     payment_vouchers = PaymentVoucher.paginate(:conditions => ["DATE(created_at) >= ? AND DATE(created_at) <= ?",
         start_date, end_date], :page => params[:page], :per_page => per_page,
-          :order => "payment_voucher_id DESC")
+      :order => "payment_voucher_id DESC")
     return payment_vouchers
   end
 

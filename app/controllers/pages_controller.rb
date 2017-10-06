@@ -199,6 +199,10 @@ class PagesController < ApplicationController
         flash[:error] = "No item was selected. Please select at least one item and continue"
         redirect_to("/update_multiple_vouchers_to_cashbook") and return
       end
+      params[:payment_voucher_ids].each do |payment_voucher_id|
+        payment_voucher = PaymentVoucher.find(payment_voucher_id)
+        payment_voucher.update_cashbook
+      end
     end
   end
   
