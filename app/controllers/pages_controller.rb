@@ -189,6 +189,19 @@ class PagesController < ApplicationController
     end
   end
 
+  def update_multiple_vouchers_to_cashbook
+    @page_header = "Update vouchers to cash book"
+    per_page = PaymentVoucher.per_page
+    @payment_vouchers = PaymentVoucher.paginate(:page => params[:page], :per_page => per_page,
+      :order => "payment_voucher_id DESC")
+    if request.post?
+      if params[:payment_voucher_ids].blank?
+        flash[:error] = "No item was selected. Please select at least one item and continue"
+        redirect_to("/update_multiple_vouchers_to_cashbook") and return
+      end
+    end
+  end
+  
   def new_account_details
     @page_header = "New account details"
     if request.post?

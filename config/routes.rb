@@ -49,6 +49,7 @@ ActionController::Routing::Routes.draw do |map|
   map.edit_this_income  '/edit_this_income',  :controller => 'pages', :action => 'edit_this_income'
   map.update_income_cash_book  '/update_income_cash_book',  :controller => 'pages', :action => 'update_income_cash_book'
 
+  map.update_multiple_vouchers_to_cashbook  '/update_multiple_vouchers_to_cashbook',  :controller => 'pages', :action => 'update_multiple_vouchers_to_cashbook'
   #map.new_voucher_menu  '/new_voucher_menu',  :controller => 'pages', :action => 'new_voucher_menu'
   # Sample of regular route:
   #   map.connect 'products/:id', :controller => 'catalog', :action => 'view'

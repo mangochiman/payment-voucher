@@ -1,0 +1,76 @@
+<form action="/update_multiple_vouchers_to_cashbook" role="form" class="form-horizontal" id="vouchers-cash-book" method="POST">
+<table class="table">
+  <thead>
+    <tr>
+      <th> &nbsp;</th>
+      <th>Voucher #</th>
+      <th>Cheque #</th>
+      <th>Voucher Date</th>
+      <th>Sub Total</th>
+      <th>Payable Amount</th>
+      <th>Expenditure Details</th>
+      <th>Payee Details</th>
+      <th>Account Name</th>
+      <th>Donor Code</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @payment_vouchers.each do |payment_voucher| %>
+      <tr>
+        <td><input type="checkbox" value="<%= payment_voucher.payment_voucher_id %>" name="payment_voucher_ids[]"/></td>
+        <td style="text-align: right;"><%= payment_voucher.voucher_number %></td>
+        <td style="text-align: right;"><%= payment_voucher.cheque_number %></td>
+        <td><%= payment_voucher.voucher_date.to_date.strftime("%d/%b/%Y") rescue payment_voucher.voucher_date  %></td>
+        <td><%= number_to_currency(payment_voucher.voucher_amount, :unit => "MWK ") %></td>
+        <td><%= number_to_currency(payment_voucher.payable_amount, :unit => "MWK ") %></td>
+        <td><%= payment_voucher.expenditure_details %></td>
+        <td><%= payment_voucher.payee %></td>
+        <td><%= payment_voucher.account_name %></td>
+        <td><%= payment_voucher.donor_code %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+  <div class="col-lg-12">
+    <input class="btn btn-primary pull-left " onclick="updateVouchersCashbokConfirm();" value="Update cash book"></input>
+  </div>
+</form>
+<%= will_paginate @payment_vouchers, :previous_label => '&laquo;', :next_label => '&raquo;' %>
+
+<!-- Modal -->
+<div class="modal fade" id="updateVouchersCashbookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Update cash book</h4>
+      </div>
+      <div class="modal-body">
+        The selected items will be updated in cash book. Are you sure?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">No, Am Not Sure</button>
+        <button onclick="submitIncomeCashbokForm();" type="button" class="btn btn-primary">Yes, Am Sure</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+
+<script type="text/javascript">
+
+  function updateVouchersCashbokConfirm(){
+    jQuery('#updateVouchersCashbookModal').modal('show');
+  }
+
+  function submitIncomeCashbokForm(){
+    form = document.getElementById("vouchers-cash-book");
+    form.submit();
+  }
+
+</script>
