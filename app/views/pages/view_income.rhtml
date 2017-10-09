@@ -5,6 +5,7 @@
       <th>Details</th>
       <th>Amount</th>
       <th>Date</th>
+      <th>Account</th>
     </tr>
   </thead>
   <tbody>
@@ -16,6 +17,7 @@
         <td><%= income.details  %></td>
         <td><%= number_to_currency(income.amount, :unit => "") %></td>
         <td><%= income.date %></td>
+        <td><%= income.donor_code %></td>
       </tr>
     <% end %>
   </tbody>

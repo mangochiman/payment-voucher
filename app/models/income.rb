@@ -5,9 +5,11 @@ class Income < ActiveRecord::Base
   validates_presence_of :details
   validates_presence_of :amount
   validates_presence_of :date
+  validates_presence_of :account_id
   
   validates_numericality_of :amount, :only_float => true
 
+  belongs_to :account, :foreign_key => :account_id
   default_scope :conditions => "#{self.table_name}.voided = 0"
   
   def self.new_income(params)
@@ -15,6 +17,7 @@ class Income < ActiveRecord::Base
     income.details = params[:details]
     income.amount = params[:amount]
     income.date = params[:date]
+    income.account_id = params[:account_id]
     return income
   end
 
@@ -23,6 +26,7 @@ class Income < ActiveRecord::Base
     income.details = params[:details]
     income.amount = params[:amount]
     income.date = params[:date]
+    income.account_id = params[:account_id]
     return income
   end
 
@@ -33,4 +37,9 @@ class Income < ActiveRecord::Base
     income.date_voided = Date.today
     return income
   end
+
+  def donor_code
+    self.account.code rescue nil
+  end
+
 end

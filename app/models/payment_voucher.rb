@@ -112,34 +112,26 @@ class PaymentVoucher < ActiveRecord::Base
     return payment_voucher
   end
 
-  def update_cashbook
-    payment_voucher = self
+  def self.update_cashbook
     file_path = "#{Rails.root}/doc/cash_book.xls"
     new_cashbook_path = "#{Rails.root}/doc/cash_book2.xls"
-    rows = PaymentVoucher.cash_book_rows(file_path)
-    #current_cash_book_balance = PaymentVoucher.current_cash_book_balance(rows)
-    PaymentVoucher.create_cash_book(new_cashbook_path, rows, payment_voucher)
-    #check_for_cheque number duplicates
-    rows = PaymentVoucher.cash_book_rows(new_cashbook_path)
-    cheque_numbers = []
-    uniq_rows = []
-    i = 0
-    rows.reverse.each do |row|
-      cheque_number = row[1]
-      cheque_number = i if cheque_number.blank?
-      next if cheque_numbers.include?(cheque_number)
-      uniq_rows << row
-      cheque_numbers << cheque_number
-      i = i + 1
+    
+    available_sheets = CashBook.work_sheets
+    data = {}
+    workbook = WriteExcel.new(new_cashbook_path)
+
+    available_sheets.each do |sheet_name|
+      rows = PaymentVoucher.cash_book_rows(sheet_name)
+      PaymentVoucher.create_cash_book_sheet(workbook, rows, sheet_name)
     end
-    rows = uniq_rows.reverse
-    PaymentVoucher.create_cash_book(new_cashbook_path, rows, payment_voucher, false) #remove duplicates
-    `cp #{new_cashbook_path} #{file_path}`
+      
+    workbook.close
+    #`cp #{new_cashbook_path} #{file_path}`
+    return data
   end
 
-  def self.create_cash_book(new_cashbook_path, rows, payment_voucher, new_entry = true)
-    workbook = WriteExcel.new(new_cashbook_path)
-    worksheet  = workbook.add_worksheet
+  def self.create_cash_book_sheet(workbook, rows, sheet_name)
+    worksheet  = workbook.add_worksheet(sheet_name)
     worksheet.set_column(0, 0, 15)
     worksheet.set_column(0, 1, 20)
     worksheet.set_column(0, 2, 20)
@@ -212,33 +204,31 @@ class PaymentVoucher < ActiveRecord::Base
       row_pos = row_pos + 1
     end
 
-    if (new_entry)
-      cheque_number = payment_voucher.cheque_number
-      voucher_date = payment_voucher.voucher_date.to_date.strftime("%d.%m.%Y")
-      payable_amount = payment_voucher.payable_amount
-      expenditure_details = payment_voucher.expenditure_details
-      payee_details = payment_voucher.payee
-
-      new_row_pos = row_pos
-      formulae = "=F#{new_row_pos}+E#{new_row_pos + 1}"
-      worksheet.write(new_row_pos, 0, voucher_date)
-      worksheet.write(new_row_pos, 1, cheque_number)
-      worksheet.write(new_row_pos, 2, payee_details)
-      worksheet.write(new_row_pos, 3, expenditure_details)
-      worksheet.write(new_row_pos, 4, -payable_amount.to_i, number_red_format)
-      worksheet.write_formula(new_row_pos, 5,  formulae, number_red_format_condition)
-    end
-
     # write to file
-    workbook.close
   end
 
-  def self.cash_book_rows(file_path)
+  def self.cash_book_rows(sheet_name)
+    data = CashBook.rows_by_sheet[sheet_name]
+    rows = [["Date", "CQ Number", "Paye", "Details of expenditure", "Amount", "Balance"]]
+    data.each do |values|
+      v = values[0]
+      cb_date = v["cb_date"]
+      cheque_number = v["cheque_number"]
+      payee = v["payee"]
+      expenditure_details = v["expenditure_details"]
+      amount = v["amount"]
+      balance = v["balance"]
+      rows << [cb_date, cheque_number, payee, expenditure_details, amount, balance]
+    end
+    return rows
+  end
+
+  def self.initial_cash_book_rows(file_path, sheet_name)
     cash_book = Spreadsheet.open file_path
-    cash_book_sheet = cash_book.worksheet 0
+    cash_book_sheet = cash_book.worksheet sheet_name
     total_rows = cash_book_sheet.count
     rows = []
-    current_balance = 0
+
     0.upto(total_rows - 1) do |i|
       cell_0 = cash_book_sheet.rows[i][0]
       cell_1 = cash_book_sheet.rows[i][1]
@@ -249,9 +239,6 @@ class PaymentVoucher < ActiveRecord::Base
         cell_5 = cash_book_sheet.rows[i][5]
       end
 
-      if i == 1
-        current_balance =  cell_5.to_f
-      end
       if (i ==1)
         cell_5 = cash_book_sheet.rows[i][5]
       end
@@ -259,9 +246,7 @@ class PaymentVoucher < ActiveRecord::Base
       if (i > i)
         cell_5 = ""
       end
-      if current_balance > 0
-        current_balance = current_balance.to_f + cell_4.to_f
-      end
+
       rows << [cell_0, cell_1, cell_2, cell_3, cell_4, cell_5]
     end
 

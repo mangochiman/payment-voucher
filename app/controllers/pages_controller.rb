@@ -200,9 +200,12 @@ class PagesController < ApplicationController
         redirect_to("/update_multiple_vouchers_to_cashbook") and return
       end
       params[:payment_voucher_ids].each do |payment_voucher_id|
-        payment_voucher = PaymentVoucher.find(payment_voucher_id)
-        payment_voucher.update_cashbook
+        params[:cb_type_id] = payment_voucher_id
+        CashBook.create_or_update_cash_book(params, "voucher")
+        PaymentVoucher.update_cashbook
       end
+      
+      redirect_to("/update_multiple_vouchers_to_cashbook") and return
     end
   end
   
@@ -265,6 +268,7 @@ class PagesController < ApplicationController
 
   def new_income
     @page_header = "New income"
+    @accounts = Account.find(:all)
     if request.post?
       new_income = Income.new_income(params)
       if new_income.save
@@ -285,6 +289,7 @@ class PagesController < ApplicationController
 
   def edit_this_income
     @income = Income.find(params[:income_id])
+    @accounts = Account.find(:all)
     @page_header = "Editing income:  #{@income.details}"
     if request.post?
       edit_income = Income.edit_income(params)
@@ -327,6 +332,13 @@ class PagesController < ApplicationController
       if (params[:income_ids].blank?)
         flash[:error] = "No item was selected. Please select at least one item and continue"
       end
+
+      params[:income_ids].each do |income_id|
+        params[:cb_type_id] = income_id
+        CashBook.create_or_update_cash_book(params, "income")
+        PaymentVoucher.update_cashbook
+      end
+      
       redirect_to("/update_income_cash_book") and return
     end
   end
@@ -573,6 +585,8 @@ class PagesController < ApplicationController
         redirect_to("/update_cash_book_menu?voucher_id=#{params[:voucher_id]}") and return
       end
       new_cashbook_path = "#{Rails.root}/doc/cash_book2.xls"
+=begin
+      new_cashbook_path = "#{Rails.root}/doc/cash_book2.xls"
       rows = cash_book_rows(file_path)
       current_cash_book_balance = PaymentVoucher.current_cash_book_balance(rows)
 
@@ -583,25 +597,12 @@ class PagesController < ApplicationController
           redirect_to("/insufficient_balance") and return
         end 
       end
+=end
+      params[:cb_type_id] = params[:voucher_id]
+      CashBook.create_or_update_cash_book(params, "voucher")
+      PaymentVoucher.update_cashbook
 
-      create_cash_book(new_cashbook_path, rows, @payment_voucher)
-      #check_for_cheque number duplicates
-      rows = cash_book_rows(new_cashbook_path)
-      cheque_numbers = []
-      uniq_rows = []
-      i = 0
-      rows.reverse.each do |row|
-        cheque_number = row[1]
-        cheque_number = i if cheque_number.blank?
-        next if cheque_numbers.include?(cheque_number)
-        uniq_rows << row
-        cheque_numbers << cheque_number
-        i = i + 1
-      end
-      rows = uniq_rows.reverse
-      create_cash_book(new_cashbook_path, rows, @payment_voucher, false) #remove duplicates
-      
-      `cp #{new_cashbook_path} #{file_path}`
+      #`cp #{new_cashbook_path} #{file_path}`
       redirect_to("/update_cash_book_menu?voucher_id=#{params[:voucher_id]}") and return
     end
   end
@@ -779,6 +780,7 @@ class PagesController < ApplicationController
       File.open(Rails.root.join('doc' , new_file_name), 'wb') do |file|
         file.write(uploaded_io.read)
       end
+      PaymentVoucher
       flash[:notice] = "Cash book has been uploaded successfully"
       redirect_to("/") and return
     end

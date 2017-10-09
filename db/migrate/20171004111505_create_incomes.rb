@@ -4,6 +4,7 @@ class CreateIncomes < ActiveRecord::Migration
       t.string :details
       t.string :amount
       t.date :date
+      t.integer :account_id
       t.integer :voided, :default => 0
       t.integer :voided_by
       t.date :date_voided
