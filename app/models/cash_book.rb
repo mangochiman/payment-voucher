@@ -131,7 +131,27 @@ class CashBook < ActiveRecord::Base
 
   def self.work_sheets
     work_sheets = CashBook.all.collect{|cb|cb.sheet_name}.uniq.compact
-    return work_sheets
+    cash_book_rows = CashBook.all
+    work_sheets = []
+    
+    cash_book_rows.each do |row|
+      unless row.sheet_name.blank?
+        work_sheets << row.sheet_name
+      end
+      unless row.cb_type_id.blank?
+        if row.cb_type.to_s.match(/voucher/i)
+          payment_voucher = PaymentVoucher.find(row.cb_type_id) rescue nil
+          work_sheets << payment_voucher.donor_code unless payment_voucher.blank?
+        end
+
+        if row.cb_type.to_s.match(/income/i)
+          income = Income.find(row.cb_type_id) rescue nil
+          work_sheets << income.donor_code unless income.blank?
+        end
+      end
+    end
+
+    return work_sheets.uniq.compact
   end
 
 end
