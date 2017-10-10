@@ -181,6 +181,7 @@ class PagesController < ApplicationController
     if request.post?
       void_voucher = PaymentVoucher.void_voucher(params)
       if void_voucher.save
+        CashBook.void_cash_book_record(params, params[:voucher_id], "voucher")
         flash[:notice] = "Voucher #: #{void_voucher.voucher_number} has been voided"
       else
         flash[:error] = void_voucher.errors.full_messages.join('<br />')
@@ -320,6 +321,7 @@ class PagesController < ApplicationController
       else
         flash[:error] = void_income.errors.full_messages.join('<br />')
       end
+      CashBook.void_cash_book_record(params, params[:income_id], "income")
       redirect_to("/view_income")
     end
   end

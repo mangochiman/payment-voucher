@@ -154,4 +154,18 @@ class CashBook < ActiveRecord::Base
     return work_sheets.uniq.compact
   end
 
+  def self.void_cash_book_record(params, cb_type_id, cb_type)
+    cash_book = CashBook.find(:last , :conditions => ["cb_type_id =? AND cb_type =?",
+        cb_type_id, cb_type])
+    
+    unless cash_book.blank?
+      cash_book.voided = 1
+      cash_book.voided_by = params[:voided_by]
+      cash_book.date_voided = Date.today
+      cash_book.save
+    end
+
+    return cash_book
+  end
+
 end
