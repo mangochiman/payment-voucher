@@ -57,6 +57,17 @@ class CashBook < ActiveRecord::Base
     return available_sheets
   end
 
+  def self.reset_cash_book_rows(user_id)
+    cash_book_rows = CashBook.all
+    cash_book_rows.each do |row|
+      row.voided = 1
+      row.voided_by = user_id
+      row.date_voided = Date.today
+      row.save
+    end
+    return cash_book_rows
+  end
+
   def self.rows_by_sheet
     data = {}
     cash_book_rows = CashBook.all

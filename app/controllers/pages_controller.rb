@@ -779,7 +779,10 @@ class PagesController < ApplicationController
       File.open(Rails.root.join('doc' , new_file_name), 'wb') do |file|
         file.write(uploaded_io.read)
       end
-      PaymentVoucher
+      
+      user_id = session[:user].user_id
+      CashBook.reset_cash_book_rows(user_id) #void all cash book rows
+      CashBook.load_initial_cashbook_data #initialize the cash book
       flash[:notice] = "Cash book has been uploaded successfully"
       redirect_to("/") and return
     end
