@@ -333,6 +333,7 @@ class PagesController < ApplicationController
     if request.post?
       if (params[:income_ids].blank?)
         flash[:error] = "No item was selected. Please select at least one item and continue"
+        redirect_to("/update_income_cash_book") and return
       end
 
       params[:income_ids].each do |income_id|

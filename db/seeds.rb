@@ -16,7 +16,7 @@ def default_user
   params[:username] = "jphiri"
   params[:role] = "Admin"
   user = User.new_user(params).save
-  UserRole.create_user_role(user, params)
+  UserRole.create_user_role(User.last, params)
 end
 
 default_user
