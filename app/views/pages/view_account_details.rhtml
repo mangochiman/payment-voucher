@@ -4,6 +4,7 @@
       <th> #</th>
       <th>Name</th>
       <th>Code</th>
+      <th>Book Balance</th>
     </tr>
   </thead>
   <tbody>
@@ -14,6 +15,13 @@
         <td><%= count %></td>
         <td><%= account.name  %></td>
         <td><%= account.code %></td>
+        <% book_balance = CashBook.sheet_book_balance(account.code) rescue 0 %>
+        <% if book_balance.to_f <= 0 %>
+          <td style="color: red; font-weight: bolder;"><%= number_to_currency(book_balance, :unit => "") %></td>
+        <% else %>
+          <td style="color: green; font-weight: bolder;"><%= number_to_currency(book_balance, :unit => "") %></td>
+        <% end %>
+
       </tr>
     <% end %>
   </tbody>

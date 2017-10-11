@@ -168,8 +168,8 @@
           <td>&nbsp;</td>
           <td>&nbsp;</td>
           <td style="text-align: center;"><%= @payment_voucher.donor_code %></td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
+          <td style="text-align: center;"><%= voucher_amount.split(".")[0] %></td>
+          <td style="text-align: center;"><%= voucher_amount.split(".")[1] %></td>
         </tr>
       </tbody>
     </table>

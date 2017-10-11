@@ -168,4 +168,16 @@ class CashBook < ActiveRecord::Base
     return cash_book
   end
 
+  def self.sheet_book_balance(sheet_name)
+    data = CashBook.rows_by_sheet[sheet_name]
+    total_balance = 0
+    data.each do |values|
+      v = values[0]
+      amount = v["amount"].to_f
+      balance = v["balance"].to_f
+      total_balance += (amount + balance)
+    end
+    return total_balance
+  end
+  
 end

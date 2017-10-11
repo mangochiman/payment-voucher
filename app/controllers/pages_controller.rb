@@ -586,11 +586,9 @@ class PagesController < ApplicationController
         flash[:error]= "Cash book not found on the server. Upload the file first and try again"
         redirect_to("/update_cash_book_menu?voucher_id=#{params[:voucher_id]}") and return
       end
-      new_cashbook_path = "#{Rails.root}/doc/cash_book2.xls"
-=begin
-      new_cashbook_path = "#{Rails.root}/doc/cash_book2.xls"
-      rows = cash_book_rows(file_path)
-      current_cash_book_balance = PaymentVoucher.current_cash_book_balance(rows)
+
+      sheet_name = @payment_voucher.donor_code
+      current_cash_book_balance = CashBook.sheet_book_balance(sheet_name) rescue 0
 
       if params[:confirm_update].blank? #only do this when this variable is blank?
         if (current_cash_book_balance < 0)
@@ -599,12 +597,11 @@ class PagesController < ApplicationController
           redirect_to("/insufficient_balance") and return
         end 
       end
-=end
+
       params[:cb_type_id] = params[:voucher_id]
       CashBook.create_or_update_cash_book(params, "voucher")
       PaymentVoucher.update_cashbook
 
-      #`cp #{new_cashbook_path} #{file_path}`
       redirect_to("/update_cash_book_menu?voucher_id=#{params[:voucher_id]}") and return
     end
   end

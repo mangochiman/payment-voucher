@@ -95,13 +95,14 @@ class PaymentVoucher < ActiveRecord::Base
   end
 
   def self.search_by_donor_code(donor_code)
-    search_results = PaymentVoucher.find(:all, :conditions => ["donor_code =? ", donor_code],
+    search_results = PaymentVoucher.find(:all, :joins => "INNER JOIN accounts ON payment_vouchers.account_id = accounts.account_id",
+      :conditions => ["code =? ", donor_code],
       :order => "payment_voucher_id DESC")
     return search_results
   end
 
   def self.search_by_account_name(account_name)
-    search_results = PaymentVoucher.find(:all, :conditions => ["account_name LIKE (?) ", "%#{account_name}%"],
+    search_results = PaymentVoucher.find(:all, :joins => "INNER JOIN accounts ON payment_vouchers.account_id = accounts.account_id", :conditions => ["name LIKE (?) ", "%#{account_name}%"],
       :order => "payment_voucher_id DESC")
     return search_results
   end
@@ -126,7 +127,7 @@ class PaymentVoucher < ActiveRecord::Base
     end
       
     workbook.close
-    #`cp #{new_cashbook_path} #{file_path}`
+    `cp #{new_cashbook_path} #{file_path}`
     return data
   end
 
