@@ -15,9 +15,15 @@
         <td><%= count %></td>
         <td><%= account.name  %></td>
         <td><%= account.code %></td>
-        <td>
-          <a href="#" onclick="voidAccountConfirm('<%= account.account_id %>')" role="button" data-toggle="modal"><i class="fa fa-trash-o"></i></a>
-        </td>
+        <% if !account.has_associated_data? %>
+          <td>
+            <a href="#" onclick="voidAccountConfirm('<%= account.account_id %>')" role="button" data-toggle="modal"><i class="fa fa-trash-o"></i></a>
+          </td>
+        <% else %>
+          <td>
+            <a href="#" role="button" data-toggle="modal"><i class="fa fa-lock"></i></a>
+          </td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

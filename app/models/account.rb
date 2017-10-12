@@ -9,7 +9,11 @@ class Account < ActiveRecord::Base
   validates_uniqueness_of :code, :message => ' already taken'
 
   default_scope :conditions => "#{self.table_name}.voided = 0"
-  
+
+  has_many :payment_vouchers, :foreign_key => :account_id
+  has_many :incomes, :foreign_key => :account_id
+
+
   def self.new_account(params)
     account = Account.new
     account.name = params[:name]
@@ -30,6 +34,13 @@ class Account < ActiveRecord::Base
     account.voided_by = params[:voided_by]
     account.date_voided = Date.today
     return account
+  end
+
+  def has_associated_data?
+    has_data = false
+    has_data = true unless (self.payment_vouchers.blank?)
+    has_data = true unless (self.incomes.blank?)
+    return has_data
   end
 
 end
