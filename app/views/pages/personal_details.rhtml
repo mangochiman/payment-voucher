@@ -39,6 +39,16 @@
                     <td><a href="mailto:<%= session[:user].username %>"><strong><%= session[:user].email %></strong></a></td>
                   </tr>
 
+                  <tr>
+                    <td>Secret Question</td>
+                    <td><strong><%= session[:user].secret_question %></strong></td>
+                  </tr>
+
+                  <tr>
+                    <td>Secret Answer</td>
+                    <td><strong><%= session[:user].secret_answer %></strong></td>
+                  </tr>
+
                 </tbody>
               </table>
 

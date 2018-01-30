@@ -8,12 +8,12 @@
 
 def default_user
   params = {}
-  params[:password] = "jphiri"
+  params[:password] = "demo"
   params[:first_name] = "James"
   params[:last_name] = "Phiri"
-  params[:email] = "jamesphiri@gmail.com"
+  params[:email] = "demo@gmail.com"
   params[:phone_number] = "099900001"
-  params[:username] = "jphiri"
+  params[:username] = "demo"
   params[:role] = "Admin"
   user = User.new_user(params).save
   UserRole.create_user_role(User.last, params)

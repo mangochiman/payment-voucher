@@ -7,6 +7,8 @@ class CreateUsers < ActiveRecord::Migration
       t.string :phone_number
       t.string :email
       t.string :password
+      t.string :secret_question
+      t.string :secret_answer
       t.string :salt
       t.integer :voided, :default => 0
       t.integer :voided_by

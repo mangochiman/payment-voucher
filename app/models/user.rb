@@ -76,6 +76,8 @@ class User < ActiveRecord::Base
     user.email = params[:email]
     user.phone_number = params[:phone_number]
     user.username = params[:username]
+    user.secret_question = params[:secret_question]
+    user.secret_answer = params[:secret_answer]
     return user
   end
 

@@ -434,6 +434,9 @@ class PagesController < ApplicationController
   end
 
   def reset_password
+    if request.post?
+      
+    end
     render :layout => false
   end
   
